@@ -1,0 +1,36 @@
+<svg viewBox="0 0 506 1404" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" overflow="hidden">
+    <defs>
+        <filter id="fx0" x="-10%" y="-10%" width="120%" height="120%" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse">
+            <feComponentTransfer color-interpolation-filters="sRGB">
+                <feFuncR type="discrete" tableValues="0 0"/>
+                <feFuncG type="discrete" tableValues="0 0"/>
+                <feFuncB type="discrete" tableValues="0 0"/>
+                <feFuncA type="linear" slope="1" intercept="0"/>
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="5.35773 5.34722"/>
+        </filter>
+        <clipPath id="clip1">
+            <rect x="1313" y="759" width="506" height="1404"/>
+        </clipPath>
+    </defs>
+    <g clip-path="url(#clip1)" transform="translate(-1313 -759)">
+        <path d="M0 5.83287C-1.15581e-15 2.61147 2.61156 0 5.83307 0L29.1666 0C32.3881-1.15577e-15 34.9997 2.61147 34.9997 5.83287L34.9997 1156.17C34.9997 1159.39 32.3881 1162 29.1666 1162L5.83307 1162C2.61156 1162 0 1159.39 0 1156.17Z" fill-rule="evenodd" transform="matrix(-1 0 0 1 1348 846)"/>
+        <g filter="url(#fx0)" transform="matrix(1.99608 0 0 2 1312 758)">
+            <g>
+                <path d="M110.005 0 559.335 0C620.089-2.1304e-14 669.34 49.2509 669.34 110.005L669.34 215.936C669.34 218.186 667.516 220.01 665.266 220.01L4.07431 220.01C1.82413 220.01 0 218.186 0 215.936L0 110.005C-2.1304e-14 49.2509 49.2508-2.1304e-14 110.005-4.2608e-14Z" fill="#FF3C28" fill-rule="evenodd" transform="matrix(-6.13526e-17 -1 -1.00196 6.12323e-17 237.721 686.17)"/>
+            </g>
+        </g>
+        <path class="body" d="M224.5 0 1141.5 0C1265.49-4.34776e-14 1366 100.512 1366 224.5L1366 440.685C1366 445.277 1362.28 449 1357.69 449L8.31491 449C3.72271 449 0 445.277 0 440.685L0 224.5C-4.34775e-14 100.512 100.512-4.34776e-14 224.5-8.69551e-14Z" fill="#FF3C28" fill-rule="evenodd" transform="matrix(-6.12323e-17 -1 -1 6.12323e-17 1791 2144)"/>
+        <path id="stick" class="btn" d="M0 94.5C-1.20948e-14 42.3091 42.533-1.20311e-14 95-2.40622e-14 147.467-4.81245e-14 190 42.3091 190 94.5 190 146.691 147.467 189 95 189 42.533 189-6.04739e-14 146.691 0 94.5Z" stroke="#000000" stroke-width="4.58333" stroke-miterlimit="8" fill-rule="evenodd" transform="matrix(-1 0 0 1 1654.5 1444.5)"/>
+        <path id="a" class="btn" d="M0 40.5001C-5.1562e-15 18.1325 18.1325-5.1562e-15 40.5001-1.03124e-14 62.8676-2.06248e-14 81.0001 18.1325 81.0001 40.5001 81.0001 62.8676 62.8676 81.0001 40.5001 81.0001 18.1325 81.0001-2.5781e-14 62.8676 0 40.5001Z" stroke="#000000" stroke-width="4.58333" stroke-miterlimit="8" fill-rule="evenodd" transform="matrix(-1 0 0 1 1703.5 1083.5)"/>
+        <path id="y" class="btn" d="M0 40.5001C-5.1562e-15 18.1325 18.1325-5.1562e-15 40.5001-1.03124e-14 62.8676-2.06248e-14 81.0001 18.1325 81.0001 40.5001 81.0001 62.8676 62.8676 81.0001 40.5001 81.0001 18.1325 81.0001-2.5781e-14 62.8676 0 40.5001Z" stroke="#000000" stroke-width="4.58333" stroke-miterlimit="8" fill-rule="evenodd" transform="matrix(-1 0 0 1 1513.5 1083.5)"/>
+        <path id="b" class="btn" d="M0 40.4999C-5.1562e-15 18.1324 18.1325-5.15618e-15 40.5001-1.03124e-14 62.8676-2.06247e-14 81.0001 18.1324 81.0001 40.4999 81.0001 62.8674 62.8676 80.9998 40.5001 80.9998 18.1325 80.9998-2.5781e-14 62.8674 0 40.4999Z" stroke="#000000" stroke-width="4.58333" stroke-miterlimit="8" fill-rule="evenodd" transform="matrix(-1 0 0 1 1606 1179)"/>
+        <path id="x" class="btn" d="M0 40.4999C-5.1562e-15 18.1324 18.1325-5.15618e-15 40.5001-1.03124e-14 62.8676-2.06247e-14 81.0001 18.1324 81.0001 40.4999 81.0001 62.8674 62.8676 80.9998 40.5001 80.9998 18.1325 80.9998-2.5781e-14 62.8674 0 40.4999Z" stroke="#000000" stroke-width="4.58333" stroke-miterlimit="8" fill-rule="evenodd" transform="matrix(-1 0 0 1 1606 992)"/>
+        <path id="home" class="btn" d="M0 51.5001C-6.55665e-15 23.0574 23.0574-6.55665e-15 51.5001-1.31133e-14L51.5001 0C79.9428-1.31133e-14 103 23.0574 103 51.5001L103 51.5001C103 79.9428 79.9428 103 51.5001 103L51.5001 103C23.0574 103 0 79.9428 0 51.5001Z" stroke="#000000" stroke-width="4.58333" stroke-miterlimit="8" fill-rule="evenodd" transform="matrix(-1 0 0 1 1533 1741)"/>
+        <path id="plus" class="btn" d="M1382.5 893.993 1413.99 893.993 1413.99 862.5 1427.01 862.5 1427.01 893.993 1458.5 893.993 1458.5 908.007 1427.01 908.007 1427.01 939.5 1413.99 939.5 1413.99 908.007 1382.5 908.007Z" stroke="#000000" stroke-width="4.58333" stroke-miterlimit="8" fill-rule="evenodd"/>
+        <path id="r" class="btn-stroke" d="M375.193 30.1031C459.267 75.035 511.258 163.109 509.977 258.427" stroke="#000000" stroke-width="20.625" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(-6.12323e-17 -1 -1 6.12323e-17 1803.5 1281.5)"/>
+        <path id="sl" class="btn body" d="M0 2.66668C0 1.19391 1.19392-1.16173e-15 2.66669-1.16173e-15L13.3331 0C14.8059 -5.80866e-16 15.9998 1.19391 15.9998 2.66668L15.9998 70.3332C15.9998 71.806 14.8059 72.9999 13.3331 72.9999L2.66669 72.9999C1.19392 72.9999 0 71.806 0 70.3332Z" stroke-width="4.58333" stroke-miterlimit="8" fill="#FF3C28" fill-rule="evenodd" transform="matrix(-1 0 0 1 1330 1091)"/>
+        <path id="sr" class="btn body" d="M0 2.6667C0 1.19392 1.19392-1.16174e-15 2.6667-1.16174e-15L13.3332 0C14.806 -5.80869e-16 15.9999 1.19392 15.9999 2.6667L15.9999 70.3335C15.9999 71.8063 14.806 73.0002 13.3332 73.0002L2.6667 73.0002C1.19392 73.0002 0 71.8063 0 70.3335Z" stroke-width="4.58333" stroke-miterlimit="8" fill="#FF3C28" fill-rule="evenodd" transform="matrix(-1 0 0 1 1330 1703)"/>
+        <path id="zr" d="M335.272 27.9091C409.384 68.7482 455.096 147.936 453.98 233.551" stroke-width="64.1667" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(-6.12323e-17 -1 -1 6.12323e-17 1761 1275)"/>
+    </g>
+</svg>

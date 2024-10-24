@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="shortcut icon" href="/src/assets/favicon.svg" type="image/svg+xml">
+  <link rel="shortcut icon alternate" href="/src/assets/favicon.ico" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings - JoyConverter</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type=text/javascript src="/eel.js"></script>
+  <script type="module" src="/src/main.ts"></script>
+  <script>
+    let preGeometry;
+    window.addEventListener("resize", sendGeometry);
+    window.addEventListener("mousedown", sendGeometry);
+    function sendGeometry() {
+      const geometry = { size: [window.outerWidth, window.outerHeight], position: [window.screenX, window.screenY] };
+      if (JSON.stringify(preGeometry) != JSON.stringify(geometry)) {
+        eel.set_geometry(geometry);
+        preGeometry = geometry;
+      }
+    }
+  </script>
+</body>
+
+</html>
