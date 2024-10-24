@@ -1,2 +1,2 @@
-# joyconverter
+# JoyConverter
 Turn your joycon into a one-handed controller.
