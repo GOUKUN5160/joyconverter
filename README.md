@@ -15,7 +15,7 @@ JoyConverter は JoyCon を片手デバイスとして使えるようにする�
 
 ## 使い方
 
-[Wiki]()を参照してください。
+[Wiki](https://github.com/GOUKUN5160/joyconverter/wiki/使い方)を参照してください。
 
 ## 免責事項
 
