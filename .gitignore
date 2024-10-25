@@ -5,17 +5,25 @@ env
 main.build
 main.dist
 main.onefile-build
+customeel/__pycache__
+customjoycon/__pycache__
 
 # joyconverter
 front/.history
 front/.vscode
 front/node_modules
 web/assets/icons
-web/expoted_profiles
+web/exported_profiles
 
 # zenbook
+JoyConverter.exe
 tests
 tmp
 メモ.txt
 環境構築手順.txt
 設計.txt
+
+# mac
+.DS_Store
+main.app
+JoyConverter.app
