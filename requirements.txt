@@ -9,5 +9,6 @@ pywebview
 pystray
 pynput
 screeninfo
+schedule
 pywin32; sys_platform == 'win32'
 psutil; sys_platform == 'win32'
