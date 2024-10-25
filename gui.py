@@ -24,7 +24,7 @@ class Window:
         self.is_send_mouse_data: list[str] = []
         self.is_send_joycon_data: dict[str, str | bool] = {"serial": "", "button": False, "stick": False}
         self.close_callback: Optional[callable] = None
-        global_info = memory.load("global_info") or {"theme": "light", "geometry": {"size": (None, None), "position": (None, None)}}
+        global_info = memory.load("global_info") or {"theme": "light", "geometry": {"size": (1000, 800), "position": (100, 100)}}
         self.size: list[int] = global_info["geometry"]["size"]
         self.position: list[int] = global_info["geometry"]["position"]
         self.theme: str = global_info["theme"]
