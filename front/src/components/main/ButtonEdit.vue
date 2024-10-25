@@ -48,13 +48,11 @@ const lengthOnRelease = ref([] as any[]);
 
 const watchTargets = [comment, checkBoxes, selectedAction, basicOnPress, basicOnKeep, basicOnKeepRapid, basicOnKeepRapidInterval, basicOnKeepRapidDelay, basicOnKeepAnotherProfile, basicOnKeepAnotherProfileDelay, basicOnRelease, switchFunc, switchDelay, countFunc, countInterval, lengthTime, lengthUnder, lengthOver, lengthOnRelease];
 watch(watchTargets, () => {
-  console.log("watched");
   element2Data();
 }, { deep: true });
 
 
 onMounted(() => {
-  console.log("mounted: buttonEdit");
   data2Element();
 });
 
@@ -237,7 +235,7 @@ const data2Element = () => {
                 <Input beforeText="時間" afterText="ms" v-model="basicOnKeepAnotherProfileDelay"
                   :number-min-max="delayMinMax" :required="defaultDelay"></Input>
               </Check>
-              <small>※このボタンのプロファイルは変わりません</small>
+              <small style="display: block; padding-top: 8px;">※このボタンのプロファイルは変わりません</small>
             </Radio>
           </v-radio-group>
         </Nest>
@@ -263,7 +261,7 @@ const data2Element = () => {
       <Radio label="ボタンが押される長さによって切り替える" value="length" :modelValue="selectedAction">
         <Input beforeText="時間" afterText="ms" v-model="lengthTime" :number-min-max="lengthMinMax"
           :required="defaultLength"></Input>
-        <Nest :label="`${Number(lengthTime) / 1000}秒未満`">
+        <Nest :label="`${Number(lengthTime) / 1000}秒未満`" class="mt-2">
           <AddFunctions v-model="lengthUnder" :other-profiles="props.otherProfiles"></AddFunctions>
         </Nest>
         <Nest :label="`${Number(lengthTime) / 1000}秒以上`">

@@ -120,7 +120,7 @@ class JoyConverter:
 
     def run(self):
         self.status = True
-        task_thread = threading.Thread(target=self.run_schedule)
+        task_thread = threading.Thread(target=self.run_schedule, daemon=True)
         task_thread.start()
         self.icon.run()
 

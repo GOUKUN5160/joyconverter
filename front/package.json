@@ -1,7 +1,7 @@
 {
   "name": "joyconverter",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,7 +14,6 @@
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@mdi/font": "^7.4.47",
     "@vue/cli": "^5.0.8",
-    "axios": "^1.7.7",
     "vue": "^3.4.35",
     "vuetify": "^3.6.14"
   },

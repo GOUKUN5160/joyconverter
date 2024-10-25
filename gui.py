@@ -405,7 +405,6 @@ class Window:
         else:
             if not app_path in config:
                 return False
-                # raise ValueError(f"app_name is required on a new app({app_path}).")
             default_name = config[app_path]["default_name"]
         config[app_path] = {"convert_data": convert_data, "name": app_name or config[app_path]["name"], "default_name": default_name}
         memory.save("app_config", config)
@@ -439,7 +438,6 @@ class Window:
         memory.save("joycon_config", config)
         return True
 
-
     def _close_callback(self, page, sockets, geometry=None):
         if geometry is not None:
             self.logger.debug(f"close_callback: {page=}, {sockets=}, {geometry=}")
@@ -458,22 +456,21 @@ class Window:
         except Exception as e:
             self.logger.error(f"close_callback error: {e}")
     def _start(self):
-        # CHROME_ARGS = [
-        #     "--incognit",            # シークレットモード
-        #     "--disable-http-cache",  # キャッシュ無効
-        #     "--disable-plugins",     # プラグイン無効
-        #     "--disable-extensions",  # 拡張機能無効
-        #     "--disable-dev-tools",   # デベロッパーツールを無効にする
-        # ]
-        # CHROME_ARGS = [
-        #     r"C:\Users\goukun\AppData\Local\min\min.exe",
-        #     "http://localhost:8000",
-        # ]
         ALLOW_EXTENSIONS = [".vue", ".html", ".css", ".js", ".ts", ".ico", ".png", ".ttf", ".woff", ".woff2", ".eot"]
-
         eel.init(self.web_dir, allowed_extensions=ALLOW_EXTENSIONS)
-        # eel.start("index.html", port=0, cmdline_args=CHROME_ARGS, size=self.size, position=self.position, close_callback=self._close_callback, class_instance=self)
+        #"""
         eel.start("index.html", port=0, size=self.size, position=self.position, close_callback=self._close_callback, class_instance=self, mode="webview", app_name="JoyConverter/0.0", title="Settings - JoyConverter")
+        """
+        CHROME_ARGS = [
+            "--incognit",            # シークレットモード
+            "--disable-http-cache",  # キャッシュ無効
+            "--disable-plugins",     # プラグイン無効
+            "--disable-extensions",  # 拡張機能無効
+            "--disable-dev-tools",   # デベロッパーツールを無効にする
+        ]
+        eel.start("index.html", port=0, cmdline_args=CHROME_ARGS, size=self.size, position=self.position, close_callback=self._close_callback, class_instance=self)
+        #"""
+
     def start(self, on_close: Optional[callable]=None, block: bool=False):
         self.logger.debug("start")
         self.close_callback = on_close
@@ -481,7 +478,7 @@ class Window:
             self.is_running = True
             self._start()
         else:
-            Thread(target=self._start).start()
+            Thread(target=self._start, daemon=True).start()
             self.is_running = True
     def stop(self):
         # eel.set_js_result_timeout(10)

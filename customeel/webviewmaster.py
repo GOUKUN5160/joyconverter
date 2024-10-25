@@ -1,7 +1,5 @@
 import multiprocessing
 import sys
-from threading import Thread
-from time import sleep
 import webview
 
 if sys.platform == "darwin":
