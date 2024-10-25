@@ -286,14 +286,3 @@ class Inputs:
         data["horizontal"] += self.convert_config["splitted_num"] / 2
         data["vertical"] += self.convert_config["splitted_num"] / 2
         return data
-
-if __name__ == "__main__":
-    inputs = Inputs(is_keyboard_listener=True)
-    def on_mouse_click(x, y, button, pressed):
-        print("click: ", type(x), type(y), type(button), type(pressed))
-    def on_mouse_move(x, y):
-        print("move: ", type(x), type(y))
-    inputs.add_mouse_listener("click", on_mouse_click)
-    inputs.add_mouse_listener("move", on_mouse_move)
-    inputs.start()
-    time.sleep(5)

@@ -46,8 +46,11 @@ class GUI:
         window.events.resized += self.on_resized
         window.events.moved += self.on_moved
         webview.settings["ALLOW_DOWNLOADS"] = True
+        """
         webview.start(self.initialize, window, user_agent=self.app_name)
-        # webview.start(self.initialize, window, user_agent=self.app_name, debug=True)
+        """
+        webview.start(self.initialize, window, user_agent=self.app_name, debug=True)
+        #"""
 
     def on_resized(self, width: int, height: int):
         self.size_que.put({"width": width, "height": height})

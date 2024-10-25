@@ -294,6 +294,13 @@ const selectedFile = () => {
   const reader = new FileReader();
   reader.onload = () => {
     const data = reader.result;
+    try {
+      atob(data as string);
+    } catch (e) {
+      snackbarErrorMessage.value = "ファイルが不正です";
+      snackbarError.value = true;
+      return;
+    }
     const importedProfile = JSON.parse(atob(data as string));
     if (!importedProfile) {
       snackbarErrorMessage.value = "インポートに失敗しました";

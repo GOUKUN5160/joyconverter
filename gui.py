@@ -11,14 +11,15 @@ import memory
 import units
 from typing import Optional
 import sys
+import config as c
 
-EXPORTED_PROFILE_SAVE_DIR = os.path.join(os.path.dirname(__file__), "web/expoted_profiles")
+EXPORTED_PROFILE_SAVE_DIR = c.get_path("web/exported_profiles")
 
 class Window:
     def __init__(self, controller: module.Controller, inputter: keymouse.Inputs) -> None:
         self.controller = controller
         self.inputter = inputter
-        self.web_dir = os.path.join(os.path.dirname(__file__), "web")
+        self.web_dir = c.get_path("web")
         self.is_running: bool = False
         self.is_send_key_data: bool = False
         self.is_send_mouse_data: list[str] = []
@@ -212,7 +213,7 @@ class Window:
         with open(os.path.join(EXPORTED_PROFILE_SAVE_DIR, name), "w") as f:
             f.write(data)
         self.logger.debug(f"[EEL] export_profile: {name}")
-        return os.path.join("/expoted_profiles", name), name
+        return os.path.join("/exported_profiles", name), name
 
 
     @eel.expose

@@ -270,15 +270,6 @@ def _static(path: str) -> Optional[btl.Response]:
             n = len(template_prefix)
             template = _start_args['jinja_env'].get_template(path[n:]) # type: ignore # depends on conditional import in start()
             response = btl.HTTPResponse(template.render())
-    try:
-        if "expoted_profiles" in path:
-            file_name = path.split("/")[1]
-            with open(os.path.join(os.path.join(os.path.dirname(__file__), os.pardir), f"web/expoted_profiles/{file_name}"), "r") as f:
-                response = btl.HTTPResponse(status=200, body=f.read())
-                response.set_header("Content-Type", "application/octet-stream")
-                return response
-    except Exception as e:
-        return btl.abort(404, "File not found")
     if response is None:
         response = btl.static_file(path, root=root_path)
 
@@ -312,8 +303,18 @@ def _websocket(ws: WebSocketT) -> None:
 
     _websocket_close(page)
 
+def _exported_profiles(path: str) -> Optional[btl.Response]:
+    print(path)
+    try:
+        with open(os.path.join(os.path.join(os.path.dirname(__file__), os.pardir), f"web/exported_profiles/{path}"), "r") as f:
+            response = btl.HTTPResponse(status=200, body=f.read())
+            response.set_header("Content-Type", "application/octet-stream")
+            return response
+    except Exception:
+        return btl.abort(404, "File not found")
 
 BOTTLE_ROUTES: Dict[str, Tuple[Callable[..., Any], Dict[Any, Any]]] = {
+    "/exported_profiles/<path:path>": (_exported_profiles, dict()),
     "/eel.js": (_eel, dict()),
     "/": (_root, dict()),
     "/<path:path>": (_static, dict()),

@@ -11,6 +11,8 @@ from memory import load
 import units
 import logger
 import os
+import shutil
+import config as c
 
 class JoyConverter:
     def __init__(self, controller: Controller, inputter: Inputs):
@@ -20,7 +22,7 @@ class JoyConverter:
         self.inputter = inputter
         self.joycon_listener_id = None
         self.status: bool = False
-        image = Image.open(os.path.join(os.path.dirname(__file__), "icons/active.png"))
+        image = Image.open(c.get_path("icons/active.png"))
         menu = Menu(
             MenuItem("設定", self.open_setting),
             MenuItem("JoyConをリロード", self.reload_joycon),
@@ -128,9 +130,13 @@ class JoyConverter:
 def blank_callback(*args, **kwargs):
     pass
 
+def clean_up_internal_files():
+    if os.path.exists(c.get_path("web/exported_profiles")):
+        shutil.rmtree(c.get_path("web/exported_profiles"))
 
 if __name__ == "__main__":
-    units.singleton()
+    # units.singleton()
+    clean_up_internal_files()
     controller = Controller()
     inputter = Inputs()
     inputter.add_keyboard_listener("press", blank_callback)

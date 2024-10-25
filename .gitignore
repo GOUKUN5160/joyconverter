@@ -5,13 +5,15 @@ env
 main.build
 main.dist
 main.onefile-build
+customeel/__pycache__
+customjoycon/__pycache__
 
 # joyconverter
 front/.history
 front/.vscode
 front/node_modules
 web/assets/icons
-web/expoted_profiles
+web/exported_profiles
 
 # zenbook
 tests
