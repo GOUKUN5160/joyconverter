@@ -17,12 +17,10 @@ const props = defineProps({
 const open = ref(props.modelValue);
 
 watch(() => props.modelValue, () => {
-  console.log("customdialog changed", props.modelValue);
   open.value = props.modelValue;
 });
 
 const onClosed = () => {
-  console.log("closed", props.modelValue, open.value);
   emit("update:modelValue", false);
 };
 

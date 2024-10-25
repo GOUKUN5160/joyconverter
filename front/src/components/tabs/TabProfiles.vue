@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, defineProps, onMounted, onUnmounted } from 'vue';
+import { ref, watch, defineProps, onMounted } from 'vue';
 import { useTheme } from "vuetify";
 import AddApp from "../parts/AddApp.vue";
 import Dialog from "../parts/CustomDialog.vue";
@@ -20,11 +20,6 @@ onMounted(() => {
   getApps();
   changeColor();
   eel.reload_joycon()();
-  console.log("mounted: profiles");
-});
-
-onUnmounted(() => {
-  console.log("unmounted: profiles");
 });
 
 const selectedApp = ref("");
@@ -74,13 +69,11 @@ const renameApp = (path: string, name: string, defaultName: string) => {
   dialogMessage.value = "新しい名前を入力してください";
   renameDialog.value = true;
   onDialogResponse = (index: number) => {
-    console.log("rename", path);
     if (index == 1) {
       let newName = appName.value;
       if (newName == "") {
         newName = defaultAppName.value;
       }
-      console.log("remane", path, newName);
       eel.rename_app(path, newName)().then(() => {
         getApps();
         snackMessage.value = `アプリ名を変更しました (${name} → ${newName})`;
@@ -94,7 +87,6 @@ const deleteApp = (path: string, name: string) => {
   dialogMessage.value = name + "を削除しますか？ 設定は復元できません。";
   deleteDialog.value = true;
   onDialogResponse = (index: number) => {
-    console.log("delete", path);
     if (index == 1) {
       eel.delete_app(path)().then(() => {
         getApps();

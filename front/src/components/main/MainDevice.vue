@@ -58,9 +58,7 @@ const size = 200;
 const calcScale = () => {
   const rects = document.getElementById("main-joycon-image")?.getClientRects() || [];
   for (const rect of rects) {
-    console.log("windowsize:", rect.height);
     scale.value = (rect.height - 100) / size;
-    console.log("scale:", scale.value);
   };
 };
 
@@ -109,7 +107,6 @@ const onButton = (serial: string, button: string, isPressed: boolean) => {
     default:
       break;
   }
-  console.log("button:", button, isPressed);
   buttonStatus.value[button] = isPressed;
 };
 
@@ -144,7 +141,6 @@ watch(() => props.joycon, () => {
     eel.expose(onButton, "onJoyConButton");
     eel.expose(onStick, "onJoyConStick");
   }
-  console.log("変化", props.joycon);
   nextTick(() => {
     calcScale();
   });
@@ -194,7 +190,6 @@ watch(() => props.joycon, () => {
 }, { deep: true, immediate: true });
 
 onMounted(() => {
-  console.log("mounted: main");
   window.addEventListener("resize", calcScale);
 });
 </script>

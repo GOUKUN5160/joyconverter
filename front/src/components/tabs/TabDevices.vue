@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, defineProps, onUnmounted } from 'vue';
+import { ref, computed, watch, onMounted, defineProps } from 'vue';
 import { useTheme } from "vuetify";
 import JoyConImage from '../parts/JoyConImage.vue';
 import DeviceMain from '../main/MainDevice.vue';
@@ -11,16 +11,10 @@ const props = defineProps({
 
 
 onMounted(() => {
-  console.log("mounted: devices");
   eel.expose(onUpdatedJoyconList, "onUpdatedJoyconList");
   eel.get_joycons()().then((result: { [key: string]: { [key: string]: any } }[]) => {
-    console.log(result);
     onUpdatedJoyconList(result);
   });
-});
-
-onUnmounted(() => {
-  console.log("unmounted: devices");
 });
 
 const theme = useTheme();
@@ -47,7 +41,6 @@ watch(() => props.drawer, () => {
 
 const onUpdatedJoyconList = (joyconList: { [key: string]: { [key: string]: any } }[]) => {
   joycons.value = joyconList;
-  console.log("変更！", joycons.value);
   const newSerials = joycons.value.map((joycon) => { return joycon.serial });
   if (selectedJoyCon.value.serial && newSerials.includes(selectedJoyCon.value.serial)) {
     selectedJoyCon.value = joycons.value.filter((joycon) => { return joycon.serial == selectedJoyCon.value.serial })[0];

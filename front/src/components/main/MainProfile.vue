@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, watch, defineProps, onMounted } from "vue";
-import Axios from "axios";
 import EditList from "../main/EditList.vue";
 import CustomLoader from "../parts/CustomLoader.vue";
 import Dialog from "../parts/CustomDialog.vue";
@@ -90,7 +89,6 @@ watch(
   }
 );
 watch(selectedLedPattern, () => {
-  console.log("LEDパターンが変更されました", selectedLedPattern.value);
   const index = LED_PATTERN.indexOf(selectedLedPattern.value);
   profiles.value[selectedProfileIndex.value].led = index;
 });
@@ -114,7 +112,6 @@ watch(
     eel
       .set_convert_info(props.path, profiles.value, useJoyCon)()
       .then((result: any) => {
-        console.log("save_convert_info", result);
         if (!result) {
           snackbarErrorMessage.value = "セーブに失敗しました";
           snackbarError.value = true;
@@ -128,13 +125,11 @@ watch(selectedProfile, () => {
   otherProfiles.value = profiles.value.filter(
     (profile: any) => profile.value != selectedProfile.value
   );
-  console.log("他のプロファイル", otherProfiles.value);
   selectedProfileIndex.value = profiles.value.findIndex(
     (profile: any) => profile.value == selectedProfile.value
   );
   selectedLedPattern.value =
     LED_PATTERN[profiles.value[selectedProfileIndex.value].led];
-  console.log("選択されたプロファイルが変更されました", selectedProfile.value);
 });
 
 const convertUseJoyConData = (data: any) => {
@@ -185,7 +180,6 @@ const itemProps = (item: { [key: string]: string } | any) => {
 };
 
 const createProfile = () => {
-  console.log("ここか？！", profiles.value);
   profiles.value.push({
     name: "プロファイル" + (profiles.value.length + 1),
     value: randstr(10),
@@ -235,7 +229,6 @@ const setMain = () => {
   snackbarOK.value = true;
 };
 const renameProfile = () => {
-  console.log("rename", selectedProfileIndex.value);
   dialogMessage.value = "新しい名前を入力してください";
   renameDialog.value = true;
   const oldName = profiles.value[selectedProfileIndex.value].name;
@@ -269,11 +262,9 @@ const duplicateProfile = () => {
 };
 
 const exportProfile = () => {
-  console.log("エクスポート");
   eel
     .export_profile(profiles.value[selectedProfileIndex.value])()
     .then((result: any) => {
-      console.log("エクスポート結果", result);
       if (!result) {
         snackbarErrorMessage.value = "エクスポートに失敗しました";
         snackbarError.value = true;
@@ -286,26 +277,10 @@ const downloadItem = (url: string, label: string) => {
   const link = document.createElement("a");
   link.href = url;
   link.download = label;
-  console.log("ダウンロード", link, url, label);
   link.click();
-  // link.click();
-  return;
-  Axios.get(url, { responseType: "blob" })
-    .then((response: any) => {
-      const blob = new Blob([response.data], {
-        type: "application/octet-stream",
-      });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = label;
-      link.click();
-      URL.revokeObjectURL(link.href);
-    })
-    .catch(console.error);
 };
 
 const importProfile = () => {
-  console.log("インポート");
   const input = document.getElementById("import-profile") as HTMLInputElement;
   input.click();
 };
@@ -314,14 +289,12 @@ const selectedFile = () => {
   const file = input.files?.item(0);
   input.value = "";
   if (!file) {
-    console.log("ファイルが選択されていません");
     return;
   }
   const reader = new FileReader();
   reader.onload = () => {
     const data = reader.result;
     const importedProfile = JSON.parse(atob(data as string));
-    console.log("インポートデータ", importedProfile);
     if (!importedProfile) {
       snackbarErrorMessage.value = "インポートに失敗しました";
       snackbarError.value = true;
@@ -341,13 +314,11 @@ const updateAvailableJoyCon = () => {
   eel
     .get_joycons()()
     .then((result: { [key: string]: { [key: string]: any } }[]) => {
-      console.log("はぁぁぁあｌ！！");
       const calibratedJoyCons = result.filter((joycon) => joycon.is_calibrated);
       availableJoyCons.value = calibratedJoyCons.map((joycon) => {
         return { name: joycon.name, serial: joycon.serial, type: joycon.type };
       });
       availableJoyCons.value.sort(sortFunc);
-      console.log("利用可能なJoyCon", availableJoyCons.value);
     });
 };
 
@@ -369,7 +340,6 @@ const init = () => {
         loading.value = false;
         return;
       }
-      console.log("get_convert_info", convert, useJoyCon);
       convertUseJoyConData(useJoyCon);
       if (convert.length <= 0) {
         profiles.value = [
@@ -382,9 +352,7 @@ const init = () => {
           },
         ];
         selectedProfile.value = profiles.value[0].value;
-        console.log("新規作成", profiles.value);
       } else {
-        console.log("既存のプロファイル", convert);
         profiles.value = convert;
         let flag = false;
         profiles.value.forEach((profile: any) => {
@@ -455,7 +423,6 @@ const init = () => {
           v-bind="props"
           :disabled="isAllJoyCon[Object(item.raw).type.toLowerCase()]"
           :title="Object(item.raw).name"
-          @click="console.log('これだぁ！', props, item, Object(item.raw))"
         >
           <template v-slot:prepend>
             <v-checkbox-btn

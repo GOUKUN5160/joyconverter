@@ -34,7 +34,6 @@ const onResponse = (response: number) => {
 const saveBack = () => {
   if (JSON.stringify(value.value) != JSON.stringify(props.modelValue)) {
     snackbar.value = true;
-    console.log("save", value.value);
     emit("update:modelValue", value.value);
   }
   dialog.value = false;
