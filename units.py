@@ -7,7 +7,6 @@ import logger as lg
 import random
 import string
 
-
 logger = lg.get_logger("units")
 
 if sys.platform == "win32":
@@ -22,6 +21,8 @@ if sys.platform == "win32":
     import win32con
     from win32com.client import GetObject
     import pythoncom
+    from decimal import Decimal
+    from math import sqrt
 
     UNIQUE_STRING = "JoyConverter-mutex"
 
@@ -234,7 +235,8 @@ if sys.platform == "win32":
             cleanup()
             raise ctypes.WinError()
 
-        w, h = IconSize.to_wh(size)
+        # w, h = IconSize.to_wh(size)
+        w, h = icon_info.xHotspot * 2, icon_info.yHotspot * 2
         bmi: BITMAPINFO = BITMAPINFO()
         ctypes.memset(ctypes.byref(bmi), 0, ctypes.sizeof(bmi))
         bmi.bmiHeader.biSize = ctypes.sizeof(BITMAPINFOHEADER)
@@ -255,8 +257,18 @@ if sys.platform == "win32":
         cleanup()
         return bits
     def win32_icon_to_image(icon_bits: ctypes.Array[ctypes.c_char], size: IconSize=IconSize.LARGE) -> Image:
-        w, h = IconSize.to_wh(size)
-        img = Image.frombytes("RGBA", (w, h), icon_bits, "raw", "BGRA")
+        try:
+            root = sqrt(len(icon_bits))
+            if not Decimal(str(root)).as_tuple().exponent == -1:
+                w, h = IconSize.to_wh(size)
+            else:
+                w = h = int(root) // 2
+            img = Image.frombytes("RGBA", (w, h), icon_bits, "raw", "BGRA")
+            logger.debug(f"Icon size: {w}x{h}")
+        except ValueError:
+            w, h = IconSize.to_wh(size)
+            logger.error(f"Icon size: {w}x{h}")
+            img = Image.frombytes("RGBA", (w, h), icon_bits, "raw", "BGRA")
         return img
     def save_app_icon(app_path: str, file_path: str) -> None:
         icon_bits = extract_icon(app_path)
@@ -288,49 +300,6 @@ elif sys.platform == "darwin":
     def open_folder_app(path: str) -> None:
         subprocess.Popen(["open", "-R", path])
 
-# TODO: 多分使わない
-class CancelableThread(threading.Thread):
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-        self._run = self.run
-        self.run = self.set_id_and_run
-        self.daemon = True
-
-    def set_id_and_run(self) -> None:
-        self.id = threading.get_native_id()
-        self._run()
-
-    def get_id(self) -> int:
-        return self.id
-
-    def raise_exception(self) -> bool:
-        res = ctypes.pythonapi.PyThreadState_SetAsyncExc(
-            ctypes.c_long(self.get_id()),
-            ctypes.py_object(SystemExit)
-        )
-        if res > 1:
-            ctypes.pythonapi.PyThreadState_SetAsyncExc(
-                ctypes.c_long(self.get_id()),
-                0
-            )
-            return False
-        return True
-
-# TODO: 未完成
-def is_working() -> bool:
-    file_name = path.basename(__file__)
-    p1 = subprocess.Popen(["ps", "-ef"], stdout=subprocess.PIPE)
-    p2 = subprocess.Popen(["grep", file_name], stdin=p1.stdout, stdout=subprocess.PIPE)
-    p3 = subprocess.Popen(["grep", "python"], stdin=p2.stdout, stdout=subprocess.PIPE)
-    p4 = subprocess.Popen(["wc", "-l"], stdin=p3.stdout, stdout=subprocess.PIPE)
-    p1.stdout.close()
-    p2.stdout.close()
-    p3.stdout.close()
-    output = p4.communicate()[0].decode("utf8").replace('\n','')
-
-    if int(output) != 1:
-        return True
-    return False
 
 def randstr(n: int) -> str:
     randlst = [random.choice(string.ascii_letters + string.digits) for i in range(n)]
