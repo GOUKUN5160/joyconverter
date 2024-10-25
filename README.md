@@ -1,6 +1,6 @@
 # JoyConverter
 
-![Logo](https://raw.githubusercontent.com/GOUKUN5160/joyconverter/refs/heads/main/icons/logo.png)
+![Logo](https://raw.githubusercontent.com/GOUKUN5160/joyconverter/refs/heads/main/icons/logo.png](https://goukun.f5.si/static/resources/00500.png)
 
 JoyConverter は JoyCon を片手デバイスとして使えるようにする作業効率化ソフトです。
 
