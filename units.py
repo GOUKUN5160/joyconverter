@@ -38,6 +38,9 @@ if sys.platform == "win32":
     def get_active_app_path() -> str:
         hwnd = win32gui.GetForegroundWindow()
         _, pid = win32process.GetWindowThreadProcessId(hwnd)
+        if pid <= 0:
+            logger.error("Active app path: None")
+            return ""
         path = Process(pid).exe()
         logger.debug(f"Active app path: {path}")
         return path
