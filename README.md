@@ -23,12 +23,6 @@ JoyConverter は JoyCon を片手デバイスとして使えるようにする�
 
 ※環境構築やビルド方法については[Wiki](https://github.com/GOUKUN5160/joyconverter/wiki/【開発用】ビルド方法)を参照してください。
 
-### 免責事項
+## 免責事項
 
 このソフトウェアを使用して発生したいかなる損害にも、作者は責任を負わないものとします。ご利用の際は各自の自己責任で使用してください。
-
-### ライセンス
-
-JoyConverter は[The MIT License](https://opensource.org/lisence/MIT)に基づき、複製や再配布、改変が許可されます。
-
-Copylight (c) GOU_KUN. All rights reserved.
