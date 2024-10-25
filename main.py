@@ -135,7 +135,7 @@ def clean_up_internal_files():
         shutil.rmtree(c.get_path("web/exported_profiles"))
 
 if __name__ == "__main__":
-    # units.singleton()
+    units.singleton()
     clean_up_internal_files()
     controller = Controller()
     inputter = Inputs()

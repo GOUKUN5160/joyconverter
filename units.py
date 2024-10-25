@@ -280,18 +280,22 @@ if sys.platform == "win32":
 elif sys.platform == "darwin":
     from AppKit import NSWorkspace, NSBitmapImageRep, NSBitmapImageFileTypePNG
     def singleton():
+        #"""
+        file_name = "JoyConverter"
+        """
         file_name = path.basename(__file__)
+        #"""
         p1 = subprocess.Popen(["ps", "-ef"], stdout=subprocess.PIPE)
         p2 = subprocess.Popen(["grep", file_name], stdin=p1.stdout, stdout=subprocess.PIPE)
-        p3 = subprocess.Popen(["grep", "python"], stdin=p2.stdout, stdout=subprocess.PIPE)
-        p4 = subprocess.Popen(["wc", "-l"], stdin=p3.stdout, stdout=subprocess.PIPE)
+        # p3 = subprocess.Popen(["grep", "python"], stdin=p2.stdout, stdout=subprocess.PIPE)
+        p4 = subprocess.Popen(["wc", "-l"], stdin=p2.stdout, stdout=subprocess.PIPE)
         p1.stdout.close()
         p2.stdout.close()
-        p3.stdout.close()
+        # p3.stdout.close()
         output = p4.communicate()[0].decode("utf8").replace("\n", "")
-        if int(output) != 1:
+        if int(output) != 2:
             logger.error("Check singleton: NG")
-            exit()
+            sys.exit(-1)
         logger.debug("Check singleton: OK")
     def get_open_apps():
         apps = NSWorkspace.sharedWorkspace().launchedApplications()
