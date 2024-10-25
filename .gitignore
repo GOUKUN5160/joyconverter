@@ -10,7 +10,7 @@ main.onefile-build
 front/.history
 front/.vscode
 front/node_modules
-web/assets/icon
+web/assets/icons
 web/expoted_profiles
 
 # zenbook
