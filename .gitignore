@@ -1,18 +1,22 @@
+# common
 __pycache__
 .history
 env
 main.build
 main.dist
 main.onefile-build
+
+# joyconverter
+front/.history
+front/.vscode
+front/node_modules
+web/assets/icon
+web/expoted_profiles
+
+# zenbook
 tests
 tmp
 配布用
 メモ.txt
 環境構築手順.txt
 設計.txt
-
-front/.history
-front/.vscode
-front/node_modules
-web/assets/icon
-web/expoted_profiles

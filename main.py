@@ -69,6 +69,8 @@ class JoyConverter:
 
     def update_current_app(self):
         active = units.get_active_app_path()
+        if active == "":
+            return
         self.action.set_current_app(active)
 
     def on_close(self):

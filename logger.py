@@ -1,5 +1,5 @@
 import logging
-from logging.handlers import RotatingFileHandler
+from logging.handlers import TimedRotatingFileHandler
 import os
 from config import SAVE_DIR
 
@@ -14,7 +14,7 @@ def get_logger(name):
         logger.addHandler(ch)
         save_dir = os.path.join(SAVE_DIR, "logs")
         os.makedirs(save_dir, exist_ok=True)
-        fh = RotatingFileHandler(os.path.join(save_dir, f"{name}.log"), maxBytes=1024 * 10, backupCount=1)
+        fh = TimedRotatingFileHandler(os.path.join(save_dir, f"{name}.log"), when="midnight", backupCount=5)
         fh.setLevel(logging.DEBUG)
         fh.setFormatter(formatter)
         logger.addHandler(fh)
