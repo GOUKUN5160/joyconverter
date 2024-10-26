@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faTwitter, faInstagram, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-library.add(faTwitter);
+library.add(faTwitter, faInstagram, faGithub);
 const VERSION = __APP_VERSION__;
 const PLATFORM = ref("");
 const CONFIG_PATH = ref("");
 const EMAIL = "goukun5160@gmail.com";
 const TWITTER = "@GOU_KUN5160";
+const INSTAGRAM = "@gou_kun5160";
+const GITHUB = "GOUKUN5160";
 
 onMounted(() => {
   eel.get_platform()().then((result: string) => {
@@ -125,8 +127,18 @@ const openStartUpFolder = () => {
             </v-expansion-panel>
             <v-expansion-panel title="開発者連絡先">
               <v-expansion-panel-text>
-                <v-icon icon="mdi-email"></v-icon>{{ EMAIL }}<br>
-                <font-awesome-icon icon="fa-brands fa-twitter" size="xl"></font-awesome-icon>{{ TWITTER }}<br><br>
+                <div class="mb-2">
+                  <v-icon icon="mdi-email" class="mr-1"></v-icon>{{ EMAIL }}<br>
+                </div>
+                <div class="mb-2">
+                  <font-awesome-icon icon="fa-brands fa-instagram" size="xl" class="mr-1"></font-awesome-icon>{{ INSTAGRAM }}<br>
+                </div>
+                <div class="mb-2">
+                  <font-awesome-icon icon="fa-brands fa-twitter" size="xl" class="mr-1"></font-awesome-icon>{{ TWITTER }}<br>
+                </div>
+                <div class="mb-2">
+                  <font-awesome-icon icon="fa-brands fa-github" size="xl" class="mr-1"></font-awesome-icon>{{ GITHUB }}<br><br>
+                </div>
                 <strong>感想、質問、バグの報告、追加してほしい機能などがありましたらお気軽にご連絡ください。</strong>
               </v-expansion-panel-text>
             </v-expansion-panel>
