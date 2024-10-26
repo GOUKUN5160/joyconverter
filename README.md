@@ -11,7 +11,7 @@ JoyConverter は JoyCon を片手デバイスとして使えるようにする�
 
 [リリース](https://github.com/GOUKUN5160/joyconverter/releases/)からダウンロードしてください。
 
-詳しいインストール手順は[Wiki](https://github.com/GOUKUN5160/joyconverter/wiki/インストール)を参照してください。
+詳しいインストール手順は[Wiki](https://github.com/GOUKUN5160/joyconverter/wiki/インストール方法)を参照してください。
 
 ## 使い方
 
