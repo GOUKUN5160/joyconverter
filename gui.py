@@ -460,7 +460,7 @@ class Window:
         ALLOW_EXTENSIONS = [".vue", ".html", ".css", ".js", ".ts", ".ico", ".png", ".ttf", ".woff", ".woff2", ".eot"]
         eel.init(self.web_dir, allowed_extensions=ALLOW_EXTENSIONS)
         #"""
-        eel.start("index.html", port=0, size=self.size, position=self.position, close_callback=self._close_callback, class_instance=self, mode="webview", app_name="JoyConverter/0.0", title="Settings - JoyConverter")
+        eel.start("index.html", port=0, size=self.size, position=self.position, close_callback=self._close_callback, class_instance=self, mode="webview", app_name="JoyConverter/0.0", title="設定 - JoyConverter")
         """
         CHROME_ARGS = [
             "--incognit",            # シークレットモード
