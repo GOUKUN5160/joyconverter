@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, watch, defineProps } from 'vue';
-import EditSlot from './EditSlot.vue';
+import { ref, watch, defineProps } from "vue";
+import EditSlot from "./EditSlot.vue";
 import Dialog from "../parts/CustomDialog.vue";
 
 const props = defineProps({
@@ -42,23 +42,47 @@ const snackbarOK = ref(false);
 const snackbarOkMessage = ref("");
 const confirmDialog = ref(false);
 const confirmDialogMessage = ref("");
-let onDialogResponse: Function = (_: number) => { };
+let onDialogResponse: Function = (_: number) => {};
 const inputs = ref(props.modelValue);
-const addSelection = ref([] as { name: string, value: string, type: string }[]);
+const addSelection = ref([] as { name: string; value: string; type: string }[]);
 
-watch(() => props.modelValue, () => {
-  inputs.value = props.modelValue;
-}, { deep: true });
-watch(inputs, () => {
-  addSelection.value = JOYCON_INPUTS.filter(obj => !inputs.value.map(obj => obj.input.value).includes(obj.value));
-}, { deep: true, immediate: true });
+watch(
+  () => props.modelValue,
+  () => {
+    inputs.value = props.modelValue;
+  },
+  { deep: true }
+);
+watch(
+  inputs,
+  () => {
+    addSelection.value = JOYCON_INPUTS.filter(
+      (obj) => !inputs.value.map((obj) => obj.input.value).includes(obj.value)
+    );
+  },
+  { deep: true, immediate: true }
+);
 
-const addInput = (input: { name: string, value: string, type: string }) => {
-  const type = ["left_stick", "right_stick"].includes(input.value) ? "stick" : ["left_gyro", "right_gyro"].includes(input.value) ? "gyro" : "button";
-  inputs.value.push({ input: { name: input.name, value: input.value, type: type, lr: input.type }, value: {}, open: true });
+const addInput = (input: { name: string; value: string; type: string }) => {
+  const type = ["left_stick", "right_stick"].includes(input.value)
+    ? "stick"
+    : ["left_gyro", "right_gyro"].includes(input.value)
+    ? "gyro"
+    : "button";
+  inputs.value.push({
+    input: { name: input.name, value: input.value, type: type, lr: input.type },
+    value: {},
+    open: true,
+  });
 };
 const deleteInput = (index: number) => {
-  confirmDialogMessage.value = `${inputs.value[index].input.name}${inputs.value[index].input.type == 'button' ? 'ボタン' : inputs.value[index].input.type == 'stick' ? 'スティック' : ''}の設定を削除しますか？復元することはできません。`;
+  confirmDialogMessage.value = `${inputs.value[index].input.name}${
+    inputs.value[index].input.type == "button"
+      ? "ボタン"
+      : inputs.value[index].input.type == "stick"
+      ? "スティック"
+      : ""
+  }の設定を削除しますか？復元することはできません。`;
   confirmDialog.value = true;
   onDialogResponse = (response: number) => {
     if (response == 1) {
@@ -79,24 +103,42 @@ const deleteInput = (index: number) => {
   <div v-for="(item, i) in inputs" class="mb-n5 pb-n5">
     <v-row no-gutters>
       <v-col cols="11">
-        <EditSlot v-model="item.value" v-model:open="item.open" :input="item.input" :otherProfiles="otherProfiles"
-          :key="item.input.value">
+        <EditSlot
+          v-model="item.value"
+          v-model:open="item.open"
+          :input="item.input"
+          :otherProfiles="otherProfiles"
+          :key="item.input.value"
+        >
         </EditSlot>
       </v-col>
       <v-col cols="1">
-        <v-btn icon="mdi-close" class="mt-4" @click="() => deleteInput(i)"></v-btn>
+        <v-btn
+          icon="mdi-close"
+          class="mt-4"
+          @click="() => deleteInput(i)"
+        ></v-btn>
       </v-col>
     </v-row>
   </div>
   <div class="text-center">
     <v-menu open-on-hover>
       <template v-slot:activator="{ props }">
-        <v-btn variant="outlined" class="mt-5" v-bind="props" :disabled="addSelection.length <= 0">
+        <v-btn
+          variant="outlined"
+          class="mt-5"
+          v-bind="props"
+          :disabled="addSelection.length <= 0"
+        >
           追加
         </v-btn>
       </template>
       <v-list>
-        <v-list-item v-for="item in addSelection" :key="item.value" @click="() => addInput(item)">
+        <v-list-item
+          v-for="item in addSelection"
+          :key="item.value"
+          @click="() => addInput(item)"
+        >
           <v-list-item-title>
             <v-chip :color="item.type == 'l' ? 'blue' : 'red'" class="mr-2">
               {{ item.type.toUpperCase() }}
@@ -107,8 +149,15 @@ const deleteInput = (index: number) => {
       </v-list>
     </v-menu>
   </div>
-  <Dialog v-model="confirmDialog" title="設定の削除" icon="mdi-alert-circle-outline" :text="confirmDialogMessage"
-    :onDialogResponse="onDialogResponse">
+  <Dialog
+    v-model="confirmDialog"
+    title="設定の削除"
+    icon="mdi-alert-circle-outline"
+    :text="confirmDialogMessage"
+    :onDialogResponse="onDialogResponse"
+  >
   </Dialog>
-  <v-snackbar v-model="snackbarOK" :timeout="2000">{{ snackbarOkMessage }}</v-snackbar>
+  <v-snackbar v-model="snackbarOK" :timeout="2000">{{
+    snackbarOkMessage
+  }}</v-snackbar>
 </template>
