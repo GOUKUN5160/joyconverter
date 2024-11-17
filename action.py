@@ -318,33 +318,33 @@ class Action:
             event = json.loads(args)
             if event["action"] == "leftClick":
                 if event["value"] == "click":
-                    self.inputter.mouse_controller.click(mouse.Button.left)
+                    self.inputter.mouse_controller.click(keymouse.Buttons.left)
                     self.logger.debug("Left click")
                 elif event["value"] == "press":
-                    self.inputter.mouse_controller.press(mouse.Button.left)
+                    self.inputter.mouse_controller.press(keymouse.Buttons.left)
                     self.logger.debug("Left click pressed")
                 elif event["value"] == "release":
-                    self.inputter.mouse_controller.release(mouse.Button.left)
+                    self.inputter.mouse_controller.release(keymouse.Buttons.left)
                     self.logger.debug("Left click released")
             elif event["action"] == "rightClick":
                 if event["value"] == "click":
-                    self.inputter.mouse_controller.click(mouse.Button.right)
+                    self.inputter.mouse_controller.click(keymouse.Buttons.right)
                     self.logger.debug("Right click")
                 elif event["value"] == "press":
-                    self.inputter.mouse_controller.press(mouse.Button.right)
+                    self.inputter.mouse_controller.press(keymouse.Buttons.right)
                     self.logger.debug("Right click pressed")
                 elif event["value"] == "release":
-                    self.inputter.mouse_controller.release(mouse.Button.right)
+                    self.inputter.mouse_controller.release(keymouse.Buttons.right)
                     self.logger.debug("Right click released")
             elif event["action"] == "middleClick":
                 if event["value"] == "click":
-                    self.inputter.mouse_controller.click(mouse.Button.middle)
+                    self.inputter.mouse_controller.click(keymouse.Buttons.middle)
                     self.logger.debug("Middle click")
                 elif event["value"] == "press":
-                    self.inputter.mouse_controller.press(mouse.Button.middle)
+                    self.inputter.mouse_controller.press(keymouse.Buttons.middle)
                     self.logger.debug("Middle click pressed")
                 elif event["value"] == "release":
-                    self.inputter.mouse_controller.release(mouse.Button.middle)
+                    self.inputter.mouse_controller.release(keymouse.Buttons.middle)
                     self.logger.debug("Middle click released")
             elif event["action"] == "scroll":
                 scroll_values = event["value"]

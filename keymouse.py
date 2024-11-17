@@ -1,4 +1,5 @@
 from pynput import mouse, keyboard
+from enum import Enum
 import platform
 import time
 import math
@@ -25,6 +26,23 @@ elif system == "Linux":
         return 1
 else:
     raise Exception("Unsupported OS")
+
+class Buttons(Enum):
+    if system == "Windows":
+        left = mouse.Button.left.value
+        right = mouse.Button.right.value
+        middle = mouse.Button.middle.value
+        x1 = mouse.Button.x1.value
+        x2 = mouse.Button.x2.value
+    elif system == "Darwin":
+        from pynput.mouse._darwin import _button_value
+        left = mouse.Button.left.value
+        right = mouse.Button.right.value
+        middle = mouse.Button.middle.value
+        x1 = _button_value("kCGEventOther", 3)
+        x2 = _button_value("kCGEventOther", 4)
+    elif system == "Linux":
+        pass
 
 class Inputs:
     def __init__(self, is_mouse_listener: bool=True, is_keyboard_listener: bool=True) -> None:
