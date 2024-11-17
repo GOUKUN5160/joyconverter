@@ -40,16 +40,16 @@ class JoyConverter:
         self.controller.add_listener(self.joycon_listener)
         self.logger.debug("JoyConverter initialized.")
 
-    def set_app_data(self):
+    def set_app_data(self, immediate: bool=False):
         config = load("app_config") or {}
         if len(config) == 0:
             self.open_setting()
             self.logger.error("No app data found.")
             return
         data = {path: config[path]["convert_data"] for path in config}
-        self.action.set_app_data(data)
+        self.action.set_app_data(data, immediate=immediate)
 
-    def joycon_listener(self, serial, event, status):
+    def joycon_listener(self, serial: str, event: str, status: dict | list):
         if event == "button":
             if self.window:
                 self.set_app_data()
@@ -77,7 +77,7 @@ class JoyConverter:
 
     def on_close(self):
         self.window = None
-        self.set_app_data()
+        self.set_app_data(True)
         self.set_calibration_data()
         self.logger.debug("Setting window closed.")
 
