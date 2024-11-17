@@ -36,20 +36,23 @@ const MOUSE_ACTIONS = [
   { name: "左クリック", value: "leftClick" },
   { name: "右クリック", value: "rightClick" },
   { name: "中クリック", value: "middleClick" },
+  { name: "第4ボタン", value: "button4" },
+  { name: "第5ボタン", value: "button5" },
   { name: "スクロール", value: "scroll" },
   { name: "移動(絶対座標)", value: "moveAbsolute" },
   { name: "移動(相対座標)", value: "moveRelative" },
 ];
 if (props.rapidMode) {
-  MOUSE_ACTIONS.splice(4, 1);
+  MOUSE_ACTIONS.splice(6, 1);
 }
 const MOUSE_CLICK_MODE = [
   { name: "クリック", value: "click" },
   { name: "プレス", value: "press" },
   { name: "リリース", value: "release" },
+  { name: "ダブルクリック", value: "double" },
 ];
 if (props.rapidMode) {
-  MOUSE_CLICK_MODE.splice(1, 2);
+  MOUSE_CLICK_MODE.splice(1, 3);
 }
 const START_STOP_KEY = [
   "a",
@@ -147,7 +150,7 @@ const element2Data = () => {
     });
   } else if (selectedType.value == "mouse") {
     if (
-      ["leftClick", "rightClick", "middleClick"].includes(
+      ["leftClick", "rightClick", "middleClick", "button4", "button5"].includes(
         selectedMouseAction.value
       )
     ) {
@@ -211,7 +214,9 @@ const data2Element = () => {
     if (
       args.action == "leftClick" ||
       args.action == "rightClick" ||
-      args.action == "middleClick"
+      args.action == "middleClick" ||
+      args.action == "button4" ||
+      args.action == "button5"
     ) {
       selectedMouseClickMode.value = args.value;
     } else if (args.action == "scroll") {
@@ -367,9 +372,13 @@ const setMouseClickFocused = (isFocus: boolean) => {
       </v-col>
       <template
         v-if="
-          ['leftClick', 'rightClick', 'middleClick'].includes(
-            selectedMouseAction
-          )
+          [
+            'leftClick',
+            'rightClick',
+            'middleClick',
+            'button4',
+            'button5',
+          ].includes(selectedMouseAction)
         "
       >
         <v-col cols="6">
