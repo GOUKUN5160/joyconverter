@@ -46,7 +46,8 @@ class Action:
                 self.current_switched_profile[self.current_app] = ""
             else:
                 profile_id = self.switched_profile[self.current_app]
-                self.current_switched_profile[self.current_app] = [profile for profile in self.app_data[self.current_app]["data"] if profile["value"] == profile_id][0]
+                matched_profiles = [profile for profile in self.app_data[self.current_app]["data"] if profile["value"] == profile_id]
+                self.current_switched_profile[self.current_app] = matched_profiles[0] if len(matched_profiles) > 0 else ""
         else:
             self.current_switched_profile[self.current_app] = self.pressing_another_profiles[-1]["profile"]
         if flag:
@@ -54,16 +55,19 @@ class Action:
 
     def update_led(self) -> None:
         profile = self._get_current_profile()
+        if profile is None:
+            return
         for joycon in self.controller.joycons:
             if self.check_use_joycon(joycon.serial, joycon.device_type):
                 joycon.set_led_on(profile["led"])
                 self.logger.debug(f"Set LED: {profile['led']} ({joycon.serial})")
 
-    def set_app_data(self, app_data: dict) -> None:
+    def set_app_data(self, app_data: dict, immediate: bool=False) -> None:
         self.app_data = app_data
-        self.set_current_app(self.current_app)
+        if immediate:
+            self.set_current_app(self.current_app)
 
-    def take_action(self, serial: str, device_type: str, joycon_event: str, joycon_status: str) -> bool:
+    def take_action(self, serial: str, device_type: str, joycon_event: str, joycon_status: dict | list) -> bool:
         if not self.check_use_joycon(serial, device_type):
             self.logger.debug(f"JoyCon not in use: {serial}")
             return False
@@ -96,12 +100,15 @@ class Action:
                 return None
             profiles = [profile for profile in self.app_data[self.current_app]["data"] if profile["main"]]
         else:
-            profiles = [profile for profile in self.app_data[self.current_app]["data"] if profile["value"] == switched["value"]]
+            try:
+                profiles = [profile for profile in self.app_data[self.current_app]["data"] if profile["value"] == switched["value"]]
+            except KeyError:
+                return None
         if len(profiles) == 0:
             return None
         return profiles[0]
 
-    def _analyze_action(self, serial: str, convert_data: dict, joycon_event: str, joycon_status: str, profile_id: str, device_type: str) -> bool | None:
+    def _analyze_action(self, serial: str, convert_data: dict, joycon_event: str, joycon_status: dict | list, profile_id: str, device_type: str) -> bool | None:
         if profile_id != self.pre_profile_id:
             if self.pre_profile_id in self.switch_count and self.switch_count[self.pre_profile_id][0]:
                 del self.switch_count[self.pre_profile_id]
@@ -223,6 +230,9 @@ class Action:
                         if action_data["keep"]["value"]["delay"]:
                             time.sleep(int(action_data["keep"]["value"]["delayTime"]) / 1000)
                         if joycon_status["button"] in self.pressed_keys:
+                            profile = action_data["keep"]["value"]["profile"]
+                            if len(profile) <= 0:
+                                return
                             self.pressing_another_profiles.append({"key": joycon_status["button"], "profile": action_data["keep"]["value"]["profile"]})
                             self.set_current_app(self.current_app)
                             self.update_led()
@@ -363,6 +373,9 @@ class Action:
                 self.logger.debug(f"Sleep: {event['value']}ms")
             elif event["action"] == "changeProfile":
                 profile_id = event["value"]
+                print("これ！", profile_id)
+                if profile_id == "":
+                    return
                 self.switched_profile[self.current_app] = profile_id
                 self.set_current_app(self.current_app)
                 self.update_led()
