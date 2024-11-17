@@ -37,7 +37,7 @@ class Window:
                 KEY_UP = 257
                 vk = data.vkCode
                 self.logger.debug(f"suppresser(win32_event_filter): {event_type=}, {vk=}, {self.is_send_key_data=}")
-                if (event_type == KEY_DOWN or event_type == KEY_UP) and self.is_send_key_data == "prevent":
+                if (event_type == KEY_DOWN or event_type == KEY_UP) and self.is_send_key_data == "keyboard":
                     self.inputter.set_keyboard_suppress(True)
                 else:
                     self.inputter.set_keyboard_suppress(False)
@@ -53,7 +53,7 @@ class Window:
                     return event
                 vk = self.for_mac_previous_key
                 self.logger.debug(f"suppresser(darwin_intercept): {event_type=}, {vk=}, {self.is_send_key_data=}")
-                if self.is_send_key_data == "prevent":
+                if self.is_send_key_data == "keyboard":
                     return None
                 return event
             keyboard_kwarg = {"darwin_intercept": darwin_intercept}
@@ -64,7 +64,7 @@ class Window:
             self.platform = "unknown"
             keyboard_kwarg = {}
         def on_release(key_id: str, key_name: str):
-            if self.is_send_key_data == "keyboard" or self.is_send_key_data == "prevent":
+            if self.is_send_key_data == "keyboard":
                 self.logger.debug(f"[EEL] sendKeyUp: {key_name}({key_id})")
                 if hasattr(eel, "onKeyUp"):
                     eel.onKeyUp(key_name, key_id)
@@ -131,15 +131,9 @@ class Window:
     @eel.expose
     def set_is_send_data(self, device: str, is_prevent: bool) -> None:
         if device == "keyboard":
-            self.logger.debug(f"[EEL] updateed is_send_key_data: {is_prevent}")
+            self.logger.debug(f"[EEL] updated is_send_key_data: {is_prevent}")
             if is_prevent:
                 self.is_send_key_data = "keyboard"
-            else:
-                self.is_send_key_data = ""
-        elif device == "keyPrevent":
-            self.logger.debug(f"[EEL] updateed is_prevent_key: {is_prevent}")
-            if is_prevent:
-                self.is_send_key_data = "prevent"
             else:
                 self.is_send_key_data = ""
         elif device == "mouseMove":
@@ -459,7 +453,7 @@ class Window:
     def _start(self):
         ALLOW_EXTENSIONS = [".vue", ".html", ".css", ".js", ".ts", ".ico", ".png", ".ttf", ".woff", ".woff2", ".eot"]
         eel.init(self.web_dir, allowed_extensions=ALLOW_EXTENSIONS)
-        #"""
+        """
         eel.start("index.html", port=0, size=self.size, position=self.position, close_callback=self._close_callback, class_instance=self, mode="webview", app_name="JoyConverter/0.0", title="設定 - JoyConverter")
         """
         CHROME_ARGS = [
