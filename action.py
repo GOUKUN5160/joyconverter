@@ -6,6 +6,7 @@ import logger
 import time
 from threading import Thread
 from screeninfo import get_monitors
+import pyperclip
 
 class Action:
     def __init__(self, inputter: keymouse.Inputs, controller: module.Controller) -> None:
@@ -422,3 +423,6 @@ class Action:
                 msec = int(event["value"])
                 Thread(target=lambda: self.controller.get_joycon_from_serial(serial).rumble(msec), daemon=True).start()
                 self.logger.debug(f"Rumble: {msec}ms (async)")
+            elif event["action"] == "clipCopy":
+                pyperclip.copy(event["value"])
+                self.logger.debug(f"Copy to clipboard: {event['value']}")

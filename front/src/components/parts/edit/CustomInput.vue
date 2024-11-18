@@ -12,6 +12,7 @@ const props = defineProps({
   modelValue: { type: String, required: false, default: "" },
   maxWidth: { type: String, required: false, default: "10%" },
   readonly: { type: Boolean, required: false, default: false },
+  reverse: { type: Boolean, required: false, default: true },
 });
 
 watch(() => props.modelValue, (value) => {
@@ -66,7 +67,7 @@ if (props.type == "number") {
   <div class="d-flex align-center mb-n6 pb-n6">
     <span style="font-size: large;" class="mr-2 mb-4" v-if="props.beforeText != ''">{{ props.beforeText }}</span>
     <v-text-field v-model="text" @input="emit('update:modelValue', text)" @update:focused="onFocusChange" :label="props.label" density="compact"
-      variant="outlined" :rules="currentRules" :max-width="props.maxWidth" reverse :readonly="props.readonly"></v-text-field>
+      variant="outlined" :rules="currentRules" :max-width="props.maxWidth" :reverse="props.reverse" :readonly="props.readonly"></v-text-field>
     <span style="font-size: large;" class="ml-2 mb-4" v-if="props.afterText != ''">{{ props.afterText }}</span>
   </div>
 </template>
