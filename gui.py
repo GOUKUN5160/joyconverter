@@ -23,7 +23,7 @@ class Window:
         self.is_running: bool = False
         self.is_send_key_data: bool = False
         self.is_send_mouse_data: list[str] = []
-        self.is_send_joycon_data: dict[str, str | bool] = {"serial": "", "button": False, "stick": False}
+        self.is_send_joycon_data: dict[str, dict[str, bool]] = {}
         self.close_callback: Optional[callable] = None
         global_info = memory.load("global_info") or {"theme": "light", "geometry": {"size": (1000, 800), "position": (100, 100)}}
         self.size: list[int] = global_info["geometry"]["size"]
@@ -95,11 +95,11 @@ class Window:
             self.send_message(f"joycon-disconnected", "info")
         self.controller.set_disconnected_handler(on_joycon_disconnect)
         def joycon_listener(serial, event, status):
-            if serial == self.is_send_joycon_data["serial"]:
-                if event == "button" and self.is_send_joycon_data["button"] and hasattr(eel, "onJoyConButton"):
+            if serial in self.is_send_joycon_data:
+                if event == "button" and self.is_send_joycon_data[serial]["button"] and hasattr(eel, "onJoyConButton"):
                     self.logger.debug(f"[EEL] sendJoyConButton: {serial=}, {status=}")
                     eel.onJoyConButton(serial, status["button"], True if status["status"] == 1 else False)
-                elif event == "stick" and self.is_send_joycon_data["stick"] and hasattr(eel, "onJoyConStick"):
+                elif event == "stick" and self.is_send_joycon_data[serial]["stick"] and hasattr(eel, "onJoyConStick"):
                     eel.onJoyConStick(serial, self.controller.calc_stick_position(serial, status))
         self.listener_id = self.controller.add_listener(joycon_listener)
         self.inputter_listener_ids = []
@@ -115,23 +115,32 @@ class Window:
             eel.onChangeFocusedApp(path)
 
     @eel.expose
-    def set_is_send_joycon_data(self, serial: str, funcs: list[str]=[]) -> None:
-        self.logger.debug(f"[EEL] updated is_send_joycon_data: {serial=}, {funcs=}")
+    def set_is_send_joycon_data(self, serials: str | list[str], funcs: list[str]=[]) -> None:
+        if isinstance(serials, str):
+            if serials == "":
+                self.is_send_joycon_data = {}
+                return
+            serials = [serials]
+        self.logger.debug(f"[EEL] updated is_send_joycon_data: {serials=}, {funcs=}")
         button = True if "button" in funcs else False
         stick = True if "stick" in funcs else False
-        self.is_send_joycon_data = {"serial": serial, "button": button, "stick": stick}
-        if not serial == "":
-            targets = [joycon for joycon in self.controller.joycons if joycon.serial == serial]
-            if len(targets) <= 0:
-                return
-            target = targets[0]
-            joycon_type = "left" if target.device_type == "L" else "right"
-            buttons = target.get_status()["buttons"]
-            for button, status in {**buttons[joycon_type], **buttons["shared"]}.items():
-                if status == 1:
-                    self.logger.debug(f"[EEL] sendJoyConButton: {serial=}, {button=}, {status=}")
-                    if hasattr(eel, "onJoyConButton"):
-                        eel.onJoyConButton(serial, button, True)
+        for serial in serials:
+            if serial == "":
+                continue
+            self.is_send_joycon_data[serial] = {"button": button, "stick": stick}
+            if button:
+                targets = [joycon for joycon in self.controller.joycons if joycon.serial == serial]
+                if len(targets) <= 0:
+                    continue
+                target = targets[0]
+                joycon_type = "left" if target.device_type.lower() == "l" else "right"
+                buttons = target.get_status()["buttons"]
+                for button, status in {**buttons[joycon_type], **buttons["shared"]}.items():
+                    if status == 1:
+                        self.logger.debug(f"[EEL] sendJoyConButton: {serial=}, {button=}, {status=}")
+                        if hasattr(eel, "onJoyConButton"):
+                            eel.onJoyConButton(serial, button, True)
+
     @eel.expose
     def set_is_send_data(self, device: str, is_prevent: bool) -> None:
         if device == "keyboard":
