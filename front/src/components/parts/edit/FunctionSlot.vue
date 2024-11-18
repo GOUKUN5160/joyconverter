@@ -90,6 +90,7 @@ const OTHER_ACTIONS = [
   { name: "プロファイル切り替え", value: "changeProfile" },
   { name: "ジャイロリセット", value: "resetGyro" },
   { name: "バイブレーション(非同期実行)", value: "rumble" },
+  { name: "クリップボードにコピー", value: "clipCopy" }
 ];
 
 const itemProps = (item: { [key: string]: string } | any) => {
@@ -115,6 +116,8 @@ const temporarySelectedData = ref([] as { [key: string]: string | number[] }[]);
 const temporaryCalcedData = ref({ x: "", y: "" } as { [key: string]: string });
 const sleepTime = ref("0");
 const rumbleTime = ref("0");
+const clipCopyText = ref("");
+
 const KeyInputFocused = ref("");
 const mouseInputFocused = ref("");
 const emittedData = ref("");
@@ -132,6 +135,7 @@ const watchTargets = [
   relativeMove,
   sleepTime,
   rumbleTime,
+  clipCopyText
 ];
 watch(
   watchTargets,
@@ -183,6 +187,8 @@ const element2Data = () => {
       args = JSON.stringify({ action: "resetGyro" });
     } else if (selectedOtherAction.value == "rumble") {
       args = JSON.stringify({ action: "rumble", value: rumbleTime.value });
+    } else if (selectedOtherAction.value == "clipCopy") {
+      args = JSON.stringify({ action: "clipCopy", value: clipCopyText.value });
     }
   }
   const data = { type: selectedType.value, args: args, id: elmId.value };
@@ -234,6 +240,8 @@ const data2Element = () => {
       selectedOtherProfile.value = args.value;
     } else if (args.action == "rumble") {
       rumbleTime.value = args.value;
+    } else if (args.action == "clipCopy") {
+      clipCopyText.value = args.value;
     }
   }
 };
@@ -323,6 +331,7 @@ const setMouseClickFocused = (isFocus: boolean) => {
   eel.set_is_send_data("mouseClick", isFocus)();
 };
 </script>
+
 <template>
   <v-row>
     <v-col cols="2">
@@ -679,9 +688,19 @@ const setMouseClickFocused = (isFocus: boolean) => {
           max-width="50%"
         ></Input>
       </v-col>
+      <v-col cols="5" v-if="selectedOtherAction == 'clipCopy'">
+        <Input
+          type="text"
+          :reverse="false"
+          before-text="テキスト"
+          v-model="clipCopyText"
+          max-width="100%"
+        ></Input>
+      </v-col>
     </template>
     <v-col cols="1">
       <v-btn @click="props.delete" icon="mdi-close" size="small"></v-btn>
     </v-col>
-  </v-row>
+
+</v-row>
 </template>
