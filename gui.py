@@ -92,7 +92,7 @@ class Window:
         def on_joycon_disconnect(number: int):
             self.logger.debug(f"[EEL] on_joycon_disconnect: {number}")
             self.on_joycon_list_change()
-            self.send_message(f"JoyConが1本切断されました", "info")
+            self.send_message(f"joycon-disconnected", "info")
         self.controller.set_disconnected_handler(on_joycon_disconnect)
         def joycon_listener(serial, event, status):
             if serial == self.is_send_joycon_data["serial"]:

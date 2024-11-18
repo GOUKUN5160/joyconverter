@@ -10,15 +10,29 @@ const snackbar = ref(false);
 const snackMessage = ref("");
 const snackColor = ref("success");
 
+const disconnectedCount = ref(0);
+const resetTimeout: any = ref(null);
+
 onMounted(() => {
   const closeWindow = () => {
     window.close();
   };
   eel.expose(closeWindow, "closeWindow");
   const onMessage = (message: string, color: string="success") => {
-    snackMessage.value = message;
-    snackColor.value = color;
-    snackbar.value = true;
+    if (message == "joycon-disconnected") {
+      snackbar.value = false;
+      if (resetTimeout.value) {
+        clearTimeout(resetTimeout.value);
+      }
+      disconnectedCount.value++;
+      snackMessage.value = `JoyConが${disconnectedCount.value}本切断されました`;
+      snackColor.value = color;
+      snackbar.value = true;
+      resetTimeout.value = setTimeout(() => {
+        disconnectedCount.value = 0;
+      }, 3000);
+      return;
+    }
   };
   eel.expose(onMessage, "onMessage");
   eel.get_theme()().then((currentTheme: String) => {
