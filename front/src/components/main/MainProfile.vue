@@ -9,6 +9,7 @@ const { randstr } = units();
 
 const props = defineProps({
   path: { type: String, required: true },
+  showing: { type: Boolean, required: true },
 });
 
 const LED_PATTERN = [
@@ -41,7 +42,7 @@ const defaultProfileName = ref("");
 const profileName = ref("");
 const confirmDialog = ref(false);
 const confirmDialogMessage = ref("");
-let onDialogResponse: Function = (_: number) => {};
+let onDialogResponse: Function = (_: number) => { };
 const profiles = ref([] as any);
 const selectedProfile = ref("");
 const selectedProfileIndex = ref(0);
@@ -50,6 +51,44 @@ const availableJoyCons = ref([] as any);
 const selectedJoyCon = ref([] as any);
 const isAllJoyCon = ref({ l: false, r: false } as { [key: string]: boolean });
 const selectedLedPattern = ref("1000");
+
+const pressingButton = ref([] as string[]);
+watch(
+  () => props.showing,
+  () => {
+    if (props.showing) {
+      const getSerials = () => {
+        let serials: any[] = [];
+        const allJoyCons = selectedJoyCon.value.filter((joycon: any) => joycon.type == "none");
+        const otherJoyCons = selectedJoyCon.value.filter((joycon: any) => joycon.type != "none");
+        allJoyCons.forEach((joycon: any) => {
+          const joyconType = joycon.serial.replace("all-", "");
+          serials = serials.concat(availableJoyCons.value.filter((joycon: any) => joycon.type.toLowerCase() == joyconType.toLowerCase()).map((joycon: any) => joycon.serial));
+        });
+        serials = serials.concat(otherJoyCons.map((joycon: any) => joycon.serial));
+        return Array.from(new Set(serials));
+      };
+      const onButton = (serial: string, button: string, isPressed: boolean) => {
+        const serials = getSerials();
+        if (!serials.includes(serial)) {
+          return;
+        }
+        if (isPressed) {
+          pressingButton.value.push(button);
+        } else {
+          pressingButton.value = pressingButton.value.filter((value) => value != button);
+        }
+      };
+      setTimeout(() => {
+        eel.set_is_send_joycon_data("all", ["button"])();
+      }, 100);
+      eel.expose(onButton, "onJoyConButton");
+    } else {
+      pressingButton.value.splice(0);
+      eel.set_is_send_joycon_data("", [])();
+    }
+  }, { immediate: true }
+);
 
 const sortFunc = (f: any, s: any) => {
   if (f.type.toLowerCase() == "r") {
@@ -201,9 +240,8 @@ const deleteProfile = () => {
     snackbarError.value = true;
     return;
   }
-  confirmDialogMessage.value = `${
-    profiles.value[selectedProfileIndex.value].name
-  }を削除しますか？設定を復元することはできません。`;
+  confirmDialogMessage.value = `${profiles.value[selectedProfileIndex.value].name
+    }を削除しますか？設定を復元することはできません。`;
   confirmDialog.value = true;
   onDialogResponse = (index: number) => {
     if (index == 1) {
@@ -385,30 +423,17 @@ const init = () => {
     </v-col>
   </v-row>
   <template v-if="props.path != ''">
-    <v-select
-      v-model="selectedJoyCon"
-      @update:focused="(val: boolean) => { if (val) updateAvailableJoyCon(); }"
-      class="mb-5"
-      :item-props="(item: any) => { return { title: item.name, value: item.serial, type: item.type }; }"
-      :items="availableJoyCons"
-      label="使用するJoyCon"
-      multiple
-      variant="outlined"
-      return-object
-      chips
-      no-data-text="JoyConを接続して補正してください。"
-    >
+    <v-select v-model="selectedJoyCon" @update:focused="(val: boolean) => { if (val) updateAvailableJoyCon(); }"
+      class="mb-5" :item-props="(item: any) => { return { title: item.name, value: item.serial, type: item.type }; }"
+      :items="availableJoyCons" label="使用するJoyCon" multiple variant="outlined" return-object chips
+      no-data-text="JoyConを接続して補正してください。">
       <template v-slot:chip="{ item }">
-        <v-chip
-          v-if="!isAllJoyCon[Object(item.raw).type.toLowerCase()]"
-          :color="
-            Object(item.raw).type.toLowerCase() == 'l'
-              ? 'blue'
-              : Object(item.raw).type.toLowerCase() == 'r'
-              ? 'red'
-              : undefined
-          "
-        >
+        <v-chip v-if="!isAllJoyCon[Object(item.raw).type.toLowerCase()]" :color="Object(item.raw).type.toLowerCase() == 'l'
+          ? 'blue'
+          : Object(item.raw).type.toLowerCase() == 'r'
+            ? 'red'
+            : undefined
+          ">
           {{ item.title }}
         </v-chip>
       </template>
@@ -426,162 +451,90 @@ const init = () => {
         <v-divider class="mt-2"></v-divider>
       </template>
       <template v-slot:item="{ props, item }">
-        <v-list-item
-          v-bind="props"
-          :disabled="isAllJoyCon[Object(item.raw).type.toLowerCase()]"
-          :title="Object(item.raw).name"
-        >
+        <v-list-item v-bind="props" :disabled="isAllJoyCon[Object(item.raw).type.toLowerCase()]"
+          :title="Object(item.raw).name">
           <template v-slot:prepend>
-            <v-checkbox-btn
-              :color="
-                Object(item.raw).type.toLowerCase() == 'l'
-                  ? 'blue'
-                  : Object(item.raw).type.toLowerCase() == 'r'
-                  ? 'red'
-                  : undefined
+            <v-checkbox-btn :color="Object(item.raw).type.toLowerCase() == 'l'
+              ? 'blue'
+              : Object(item.raw).type.toLowerCase() == 'r'
+                ? 'red'
+                : undefined
               "
-              :model-value="selectedJoyCon.map((joycon: any) => { return joycon.serial }).includes(Object(item.raw).serial)"
-            >
+              :model-value="selectedJoyCon.map((joycon: any) => { return joycon.serial }).includes(Object(item.raw).serial)">
             </v-checkbox-btn>
           </template>
         </v-list-item>
       </template>
     </v-select>
     <v-card border class="pa-5">
-      <v-select
-        v-model="selectedProfile"
-        :items="profiles"
-        :item-props="itemProps"
-        label="プロファイル"
-        density="compact"
-        no-data-text="エラーです。アプリを削除してやり直してください。"
-      ></v-select>
-      <div
-        v-if="profiles[selectedProfileIndex] != undefined"
-        class="text-center"
-      >
+      <v-select v-model="selectedProfile" :items="profiles" :item-props="itemProps" label="プロファイル" density="compact"
+        no-data-text="エラーです。アプリを削除してやり直してください。"></v-select>
+      <div v-if="profiles[selectedProfileIndex] != undefined" class="text-center">
         <v-row justify="center">
           <v-col>
             <v-btn color="primary" dark @click="createProfile">作成</v-btn>
           </v-col>
           <v-col>
-            <v-btn
-              color="red"
-              dark
-              @click="deleteProfile"
-              :disabled="profiles[selectedProfileIndex].main"
-              >削除</v-btn
-            >
+            <v-btn color="red" dark @click="deleteProfile" :disabled="profiles[selectedProfileIndex].main">削除</v-btn>
           </v-col>
           <v-col>
             <v-btn color="#FF33FF" dark @click="renameProfile">名前変更</v-btn>
           </v-col>
           <v-col>
-            <v-btn
-              color="green"
-              dark
-              @click="setMain"
-              :disabled="profiles[selectedProfileIndex].main"
-              >メインに設定</v-btn
-            >
+            <v-btn color="green" dark @click="setMain" :disabled="profiles[selectedProfileIndex].main">メインに設定</v-btn>
           </v-col>
           <v-col>
             <v-btn color="purple" dark @click="duplicateProfile">複製</v-btn>
           </v-col>
           <v-col>
-            <v-btn color="#FF6600" dark @click="importProfile"
-              >インポート</v-btn
-            >
+            <v-btn color="#FF6600" dark @click="importProfile">インポート</v-btn>
           </v-col>
           <v-col>
-            <v-btn color="#FF6600" dark @click="exportProfile"
-              >エクスポート</v-btn
-            >
+            <v-btn color="#FF6600" dark @click="exportProfile">エクスポート</v-btn>
           </v-col>
         </v-row>
       </div>
     </v-card>
     <div id="led-select">
-      <v-select
-        label="LEDパターン"
-        v-model="selectedLedPattern"
-        :items="LED_PATTERN"
-        class="mx-10 mt-5"
-        variant="solo-filled"
-        hide-details
-      >
+      <v-select label="LEDパターン" v-model="selectedLedPattern" :items="LED_PATTERN" class="mx-10 mt-5"
+        variant="solo-filled" hide-details>
         <template v-slot:selection="{ item }">
           <Led :led-data="item.title" :led-pattern="LED_PATTERN"></Led>
         </template>
         <template v-slot:item="{ props }">
           <v-list-item v-bind="props">
             <template v-slot:title>
-              <Led
-                :led-data="String(props.title)"
-                :led-pattern="LED_PATTERN"
-              ></Led>
+              <Led :led-data="String(props.title)" :led-pattern="LED_PATTERN"></Led>
             </template>
           </v-list-item>
         </template>
       </v-select>
     </div>
     <v-divider class="my-8"></v-divider>
-    <EditList
-      v-if="profiles[selectedProfileIndex] != undefined"
-      v-model="profiles[selectedProfileIndex].convert"
-      :other-profiles="otherProfiles"
-    ></EditList>
-    <CustomLoader
-      title="ローディング中..."
-      icon="mdi-clock-time-nine-outline"
-      :open="loading"
-    ></CustomLoader>
-    <v-snackbar
-      v-model="snackbarError"
-      :timeout="2000"
-      color="red"
-      elevation="24"
-      >{{ snackbarErrorMessage }}</v-snackbar
-    >
+    <EditList v-if="profiles[selectedProfileIndex] != undefined" v-model="profiles[selectedProfileIndex].convert"
+      :other-profiles="otherProfiles" :pressing-button="pressingButton"></EditList>
+    <CustomLoader title="ローディング中..." icon="mdi-clock-time-nine-outline" :open="loading"></CustomLoader>
+    <v-snackbar v-model="snackbarError" :timeout="2000" color="red" elevation="24">{{ snackbarErrorMessage
+      }}</v-snackbar>
     <v-snackbar v-model="snackbarOK" :timeout="2000">{{
       snackbarOkMessage
     }}</v-snackbar>
   </template>
-  <Dialog
-    v-model="renameDialog"
-    title="アプリ名の変更"
-    icon="mdi-rename"
-    :text="dialogMessage"
-    :onDialogResponse="onDialogResponse"
-  >
-    <v-text-field
-      v-model="profileName"
-      :placeholder="defaultProfileName"
-      @keydown.enter="
-        onDialogResponse(1);
-        renameDialog = false;
-      "
-    ></v-text-field>
+  <Dialog v-model="renameDialog" title="アプリ名の変更" icon="mdi-rename" :text="dialogMessage"
+    :onDialogResponse="onDialogResponse">
+    <v-text-field v-model="profileName" :placeholder="defaultProfileName" @keydown.enter="
+      onDialogResponse(1);
+    renameDialog = false;
+    "></v-text-field>
   </Dialog>
-  <Dialog
-    v-model="confirmDialog"
-    title="プロファイルの削除"
-    icon="mdi-alert-circle-outline"
-    :text="confirmDialogMessage"
-    :onDialogResponse="onDialogResponse"
-  >
+  <Dialog v-model="confirmDialog" title="プロファイルの削除" icon="mdi-alert-circle-outline" :text="confirmDialogMessage"
+    :onDialogResponse="onDialogResponse">
   </Dialog>
-  <input
-    style="display: none"
-    id="import-profile"
-    type="file"
-    accept=".jcp"
-    @change="selectedFile()"
-  />
+  <input style="display: none" id="import-profile" type="file" accept=".jcp" @change="selectedFile()" />
 </template>
 
 <style>
-#led-select > div > div > div > div > div .v-select__selection {
+#led-select>div>div>div>div>div .v-select__selection {
   width: 100%;
 }
 </style>

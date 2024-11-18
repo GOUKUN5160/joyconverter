@@ -43,7 +43,7 @@ const appName = ref("");
 const appPath = ref("");
 
 const changeColor = () => {
-  selectedColor.value = theme.global.name.value == "dark" ? "rgb(204 120 0)" : "rgb(245 221 187)";
+  selectedColor.value = theme.global.name.value == "dark" ? "rgb(204 120 0)" : "rgb(255 175 63)";
   focusedColor.value = theme.global.name.value == "dark" ? "rgb(45 58 77)" : "rgb(231 241 255)";
 };
 const changeAddAppState = (state: boolean) => {
@@ -139,7 +139,7 @@ const deleteApp = (path: string, name: string) => {
 
   <v-main>
     <v-container fluid>
-      <ProfileMain :path="selectedApp"></ProfileMain>
+      <ProfileMain :path="selectedApp" :showing="props.drawer"></ProfileMain>
     </v-container>
     <AddApp :open="addApp" :changeState="changeAddAppState" :reloadList="getApps"></AddApp>
     <Dialog v-model="deleteDialog" title="削除しますか？" icon="mdi-alert-circle-outline" :text="dialogMessage"

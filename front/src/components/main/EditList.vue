@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { ref, watch, defineProps } from "vue";
+import { useTheme } from "vuetify";
 import EditSlot from "./EditSlot.vue";
 import Dialog from "../parts/CustomDialog.vue";
 
 const props = defineProps({
   modelValue: { type: Array<any>, required: true },
   otherProfiles: { type: Array<any>, required: true },
+  pressingButton: { type: Array<String>, required: true },
 });
+const theme = useTheme();
 
 const JOYCON_INPUTS = [
   { name: "Lスティック", value: "left_stick", type: "l" },
@@ -45,6 +48,14 @@ const confirmDialogMessage = ref("");
 let onDialogResponse: Function = (_: number) => {};
 const inputs = ref(props.modelValue);
 const addSelection = ref([] as { name: string; value: string; type: string }[]);
+
+const pressingColor = ref("");
+const changeColor = () => {
+  pressingColor.value = theme.global.name.value == "dark" ? "rgb(65 54 0)" : "rgb(255 245 160)";
+};
+watch(theme.global.name, () => {
+  changeColor()
+}, { immediate: true });
 
 watch(
   () => props.modelValue,
@@ -108,6 +119,7 @@ const deleteInput = (index: number) => {
           v-model:open="item.open"
           :input="item.input"
           :otherProfiles="otherProfiles"
+          :style="props.pressingButton.includes(item.input.value) ? `background-color: ${pressingColor};` : undefined"
           :key="item.input.value + (item.value.comment ? item.value.comment : '') + (item.value.preview ? item.value.preview : '')"
         >
         </EditSlot>
@@ -137,6 +149,7 @@ const deleteInput = (index: number) => {
         <v-list-item
           v-for="item in addSelection"
           :key="item.value"
+          :style="props.pressingButton.includes(item.value) ? `background-color: ${pressingColor};` : undefined"
           @click="() => addInput(item)"
         >
           <v-list-item-title>

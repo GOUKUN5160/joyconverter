@@ -12,6 +12,7 @@ const props = defineProps({
   input: { type: Object, required: true },
   open: { type: Boolean, required: false, default: false },
   otherProfiles: { type: Array<any>, required: true },
+  style: { type: String, required: false, default: undefined },
 });
 
 
@@ -45,8 +46,7 @@ const saveBack = () => {
   <div class="pa-4">
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen persistent>
       <template v-slot:activator="{ props: activatorProps }">
-        <v-btn v-bind="activatorProps" @click="value = JSON.parse(JSON.stringify(props.modelValue))" class="py-5 wide-button"
-          size="x-large" variant="outlined" block>
+        <v-btn v-bind="activatorProps" @click="value = JSON.parse(JSON.stringify(props.modelValue))" class="py-5 wide-button" :style="props.style" size="x-large" variant="outlined" block>
           <v-row style="max-width: 100%;">
             <v-col cols="auto" class="text-left">
               <span>

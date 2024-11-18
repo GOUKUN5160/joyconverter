@@ -70,11 +70,13 @@ class Action:
 
     def take_action(self, serial: str, device_type: str, joycon_event: str, joycon_status: dict | list) -> bool:
         if not self.check_use_joycon(serial, device_type):
-            self.logger.debug(f"JoyCon not in use: {serial}")
+            if joycon_event == "button":
+                self.logger.debug(f"JoyCon not in use: {serial}")
             return False
         profile = self._get_current_profile()
         if profile is None:
-            self.logger.debug("Profile not found.")
+            if joycon_event == "button":
+                self.logger.debug("Profile not found.")
             return False
         Thread(target=self._analyze_action, args=(serial, profile["convert"], joycon_event, joycon_status, profile["value"], device_type), daemon=True).start()
         return True
