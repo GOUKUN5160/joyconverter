@@ -23,7 +23,6 @@ const snackbar = ref(false);
 const onResponse = (response: number) => {
   confirmDialog.value = false;
   if (response == 1) {
-
     dialog.value = false;
     emit("update:open", false);
   } else {

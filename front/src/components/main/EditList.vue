@@ -108,7 +108,7 @@ const deleteInput = (index: number) => {
           v-model:open="item.open"
           :input="item.input"
           :otherProfiles="otherProfiles"
-          :key="item.input.value"
+          :key="item.input.value + (item.value.comment ? item.value.comment : '') + (item.value.preview ? item.value.preview : '')"
         >
         </EditSlot>
       </v-col>
