@@ -110,6 +110,10 @@ class Window:
     def __del__(self):
         self.stop()
 
+    def current_app_hook(self, path: str) -> None:
+        if hasattr(eel, "onChangeFocusedApp"):
+            eel.onChangeFocusedApp(path)
+
     @eel.expose
     def set_is_send_joycon_data(self, serial: str, funcs: list[str]=[]) -> None:
         self.logger.debug(f"[EEL] updated is_send_joycon_data: {serial=}, {funcs=}")

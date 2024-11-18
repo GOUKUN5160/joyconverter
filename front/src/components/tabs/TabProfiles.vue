@@ -11,15 +11,22 @@ const props = defineProps({
 
 const theme = useTheme();
 const selectedColor = ref("");
+const focusedColor = ref("");
 
 watch(theme.global.name, () => {
   changeColor()
 });
 
+const focusedApp = ref("");
+const onChangeFocusedApp = (path: string) => {
+  focusedApp.value = path;
+};
+
 onMounted(() => {
   getApps();
   changeColor();
   eel.reload_joycon()();
+  eel.expose(onChangeFocusedApp, "onChangeFocusedApp");
 });
 
 const selectedApp = ref("");
@@ -37,6 +44,7 @@ const appPath = ref("");
 
 const changeColor = () => {
   selectedColor.value = theme.global.name.value == "dark" ? "rgb(204 120 0)" : "rgb(245 221 187)";
+  focusedColor.value = theme.global.name.value == "dark" ? "rgb(45 58 77)" : "rgb(231 241 255)";
 };
 const changeAddAppState = (state: boolean) => {
   addApp.value = state;
@@ -105,7 +113,7 @@ const deleteApp = (path: string, name: string) => {
   <v-navigation-drawer v-if="props.drawer" permanent @keydown.esc="selectedApp = ''" disable-resize-watcher mobile>
     <div v-for="(item, i) in apps" :value="item" :key="i">
       <v-list-item :title="item.text" link @click="selectedApp = item.path" height="50px"
-        :style="(selectedApp == item.path) ? `background-color: ${selectedColor};` : undefined">
+        :style="(selectedApp == item.path) ? `background-color: ${selectedColor};` : (focusedApp == item.path) ? `background-color: ${focusedColor};` : undefined">
         <template v-slot:prepend>
           <img :src="item.iconPath" class="mx-2" width="32" height="32" /> </template>
         <template v-slot:append>
@@ -145,5 +153,4 @@ const deleteApp = (path: string, name: string) => {
     </Dialog>
     <v-snackbar v-model="snackbar" :timeout=2000>{{ snackMessage }}</v-snackbar>
   </v-main>
-  <!-- <v-footer color="primary" app> Footer </v-footer> -->
 </template>

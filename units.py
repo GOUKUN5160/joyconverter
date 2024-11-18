@@ -9,14 +9,13 @@ import string
 logger = lg.get_logger("units")
 
 if sys.platform == "win32":
-    from psutil import Process
+    from psutil import Process, NoSuchProcess
     import win32process
     import win32gui
     import ctypes
     from ctypes.wintypes import *
     from enum import Enum
     from PIL import Image
-    import numpy as np
     import win32con
     from win32com.client import GetObject
     import pythoncom
@@ -39,9 +38,13 @@ if sys.platform == "win32":
         hwnd = win32gui.GetForegroundWindow()
         _, pid = win32process.GetWindowThreadProcessId(hwnd)
         if pid <= 0:
-            logger.error("Active app path: None")
+            logger.error("Active app path: None (pid <= 0)")
             return ""
-        path = Process(pid).exe()
+        try:
+            path = Process(pid).exe()
+        except NoSuchProcess:
+            logger.error("Active app path: None (NoSuchProcess)")
+            return ""
         logger.debug(f"Active app path: {path}")
         return path
 

@@ -74,6 +74,8 @@ class JoyConverter:
         if active == "":
             return
         self.action.set_current_app(active)
+        if self.window:
+            self.window.current_app_hook(active)
 
     def on_close(self):
         self.window = None
