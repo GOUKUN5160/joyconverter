@@ -157,10 +157,7 @@ const reloadList = () => {
   </v-navigation-drawer>
   <v-main>
     <v-container fluid>
-      <!-- <v-container fluid class="full-container"> -->
-      <!-- <v-layout fill-height> -->
       <DeviceMain :joycon="selectedJoyCon"></DeviceMain>
-      <!-- </v-layout> -->
     </v-container>
   </v-main>
   <AppLoader
