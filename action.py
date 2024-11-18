@@ -1,7 +1,6 @@
 import json
 import module
 import keymouse
-from keymouse import mouse
 import logger
 import time
 from threading import Thread
