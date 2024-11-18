@@ -51,7 +51,7 @@ const addSelection = ref([] as { name: string; value: string; type: string }[]);
 
 const pressingColor = ref("");
 const changeColor = () => {
-  pressingColor.value = theme.global.name.value == "dark" ? "rgb(204 120 0)" : "rgb(245 221 187)";
+  pressingColor.value = theme.global.name.value == "dark" ? "rgb(65 54 0)" : "rgb(255 245 160)";
 };
 watch(theme.global.name, () => {
   changeColor()

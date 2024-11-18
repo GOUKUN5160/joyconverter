@@ -137,7 +137,9 @@ watch(() => props.joycon, () => {
   if (Object.keys(props.joycon).length <= 0) {
     eel.set_is_send_joycon_data("", [])();
   } else {
-    eel.set_is_send_joycon_data(props.joycon.serial, ["button", "stick"])();
+    setTimeout(() => {
+      eel.set_is_send_joycon_data(props.joycon.serial, ["button", "stick"])();
+    }, 100);
     eel.expose(onButton, "onJoyConButton");
     eel.expose(onStick, "onJoyConStick");
   }

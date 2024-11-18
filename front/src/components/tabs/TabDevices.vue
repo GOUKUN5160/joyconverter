@@ -22,7 +22,7 @@ const theme = useTheme();
 const selectedColor = computed(() => {
   return theme.global.name.value == "dark"
     ? "rgb(204 120 0)"
-    : "rgb(245 221 187)";
+    : "rgb(255 175 63)";
 });
 const selectedJoyCon = ref({} as { [key: string]: any });
 const previousSelectedJoyCon = ref({} as { [key: string]: any });
@@ -100,7 +100,7 @@ const reloadList = () => {
         link
         @click="selectedJoyCon = item"
         :style="
-          selectedJoyCon == item
+          selectedJoyCon.serial == item.serial
             ? `background-color: ${selectedColor};`
             : undefined
         "

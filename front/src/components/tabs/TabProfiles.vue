@@ -43,7 +43,7 @@ const appName = ref("");
 const appPath = ref("");
 
 const changeColor = () => {
-  selectedColor.value = theme.global.name.value == "dark" ? "rgb(204 120 0)" : "rgb(245 221 187)";
+  selectedColor.value = theme.global.name.value == "dark" ? "rgb(204 120 0)" : "rgb(255 175 63)";
   focusedColor.value = theme.global.name.value == "dark" ? "rgb(45 58 77)" : "rgb(231 241 255)";
 };
 const changeAddAppState = (state: boolean) => {

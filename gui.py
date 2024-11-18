@@ -95,12 +95,11 @@ class Window:
             self.send_message(f"joycon-disconnected", "info")
         self.controller.set_disconnected_handler(on_joycon_disconnect)
         def joycon_listener(serial, event, status):
-            if serial in self.is_send_joycon_data:
-                if event == "button" and self.is_send_joycon_data[serial]["button"] and hasattr(eel, "onJoyConButton"):
-                    self.logger.debug(f"[EEL] sendJoyConButton: {serial=}, {status=}")
-                    eel.onJoyConButton(serial, status["button"], True if status["status"] == 1 else False)
-                elif event == "stick" and self.is_send_joycon_data[serial]["stick"] and hasattr(eel, "onJoyConStick"):
-                    eel.onJoyConStick(serial, self.controller.calc_stick_position(serial, status))
+            if event == "button" and hasattr(eel, "onJoyConButton") and ((serial in self.is_send_joycon_data and self.is_send_joycon_data[serial]["button"]) or ("all" in self.is_send_joycon_data and self.is_send_joycon_data["all"]["button"])):
+                self.logger.debug(f"[EEL] sendJoyConButton: {serial=}, {status=}")
+                eel.onJoyConButton(serial, status["button"], True if status["status"] == 1 else False)
+            elif event == "stick" and hasattr(eel, "onJoyConStick") and ((serial in self.is_send_joycon_data and self.is_send_joycon_data[serial]["stick"]) or ("all" in self.is_send_joycon_data and self.is_send_joycon_data["all"]["stick"])):
+                eel.onJoyConStick(serial, self.controller.calc_stick_position(serial, status))
         self.listener_id = self.controller.add_listener(joycon_listener)
         self.inputter_listener_ids = []
         self.inputter_listener_ids.append(self.inputter.add_mouse_listener("move", on_move))
@@ -118,6 +117,7 @@ class Window:
     def set_is_send_joycon_data(self, serials: str | list[str], funcs: list[str]=[]) -> None:
         if isinstance(serials, str):
             if serials == "":
+                self.logger.debug(f"[EEL] updated is_send_joycon_data: {serials=}, {funcs=}")
                 self.is_send_joycon_data = {}
                 return
             serials = [serials]
@@ -127,19 +127,19 @@ class Window:
         for serial in serials:
             if serial == "":
                 continue
+            if serial == "all":
+                self.is_send_joycon_data = {}
             self.is_send_joycon_data[serial] = {"button": button, "stick": stick}
             if button:
-                targets = [joycon for joycon in self.controller.joycons if joycon.serial == serial]
-                if len(targets) <= 0:
-                    continue
-                target = targets[0]
-                joycon_type = "left" if target.device_type.lower() == "l" else "right"
-                buttons = target.get_status()["buttons"]
-                for button, status in {**buttons[joycon_type], **buttons["shared"]}.items():
-                    if status == 1:
-                        self.logger.debug(f"[EEL] sendJoyConButton: {serial=}, {button=}, {status=}")
-                        if hasattr(eel, "onJoyConButton"):
-                            eel.onJoyConButton(serial, button, True)
+                targets = [joycon for joycon in self.controller.joycons if serial == "all" or joycon.serial == serial]
+                for target in targets:
+                    joycon_type = "left" if target.device_type.lower() == "l" else "right"
+                    buttons = target.get_status()["buttons"]
+                    for button, status in {**buttons[joycon_type], **buttons["shared"]}.items():
+                        if status == 1:
+                            self.logger.debug(f"[EEL] sendJoyConButton: {target.serial=}, {button=}, {status=}")
+                            if hasattr(eel, "onJoyConButton"):
+                                eel.onJoyConButton(target.serial, button, True)
 
     @eel.expose
     def set_is_send_data(self, device: str, is_prevent: bool) -> None:
@@ -466,8 +466,8 @@ class Window:
     def _start(self):
         ALLOW_EXTENSIONS = [".vue", ".html", ".css", ".js", ".ts", ".ico", ".png", ".ttf", ".woff", ".woff2", ".eot"]
         eel.init(self.web_dir, allowed_extensions=ALLOW_EXTENSIONS)
-        """
-        eel.start("index.html", port=0, size=self.size, position=self.position, close_callback=self._close_callback, class_instance=self, mode="webview", app_name="JoyConverter/0.0", title="設定 - JoyConverter")
+        #"""
+        eel.start("index.html", port=0, size=self.size, position=self.position, close_callback=self._close_callback, class_instance=self, mode="webview", app_name="JoyConverter/setting", title="設定 - JoyConverter")
         """
         CHROME_ARGS = [
             "--incognit",            # シークレットモード
