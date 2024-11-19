@@ -286,11 +286,10 @@ elif sys.platform == "darwin":
     import __main__
 
     def singleton():
-        #"""
-        file_name = "JoyConverter" # on nuitka
-        """
-        file_name = path.basename(__main__.__file__) # on python
-        #"""
+        if getattr(sys, "frozen", False):
+            file_name = "JoyConverter" # on nuitka
+        else:
+            file_name = path.basename(__main__.__file__) # on python
         p1 = subprocess.Popen(["ps", "-ef"], stdout=subprocess.PIPE)
         p2 = subprocess.Popen(["grep", file_name], stdin=p1.stdout, stdout=subprocess.PIPE)
         p3 = subprocess.Popen(["wc", "-l"], stdin=p2.stdout, stdout=subprocess.PIPE)
