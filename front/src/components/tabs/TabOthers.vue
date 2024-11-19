@@ -105,7 +105,7 @@ const openStartUpFolder = () => {
                 </template>
                 設定ファイルは以下の場所に保存されています。<br>
                 <strong>{{ CONFIG_PATH }}</strong><br>
-                <v-btn @click="openProgramFolder()" color="primary" dark class="mr-5">ソフトの場所を開く</v-btn>
+                <v-btn @click="openProgramFolder()" color="primary" dark class="mr-5" v-if="PLATFORM == 'windows'">ソフトの場所を開く</v-btn>
                 <v-btn @click="openConfigFolderOnFileApp()" color="primary" dark>設定ファイルの場所を開く</v-btn>
               </v-expansion-panel-text>
             </v-expansion-panel>
