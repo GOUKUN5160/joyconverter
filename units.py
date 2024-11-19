@@ -283,12 +283,13 @@ if sys.platform == "win32":
 
 elif sys.platform == "darwin":
     from AppKit import NSWorkspace, NSBitmapImageRep, NSBitmapImageFileTypePNG
+    import __main__
 
     def singleton():
         #"""
         file_name = "JoyConverter" # on nuitka
         """
-        file_name = path.basename(__file__) # on python
+        file_name = path.basename(__main__.__file__) # on python
         #"""
         p1 = subprocess.Popen(["ps", "-ef"], stdout=subprocess.PIPE)
         p2 = subprocess.Popen(["grep", file_name], stdin=p1.stdout, stdout=subprocess.PIPE)
@@ -296,7 +297,7 @@ elif sys.platform == "darwin":
         p1.stdout.close()
         p2.stdout.close()
         output = p3.communicate()[0].decode("utf8").replace("\n", "")
-        if int(output) != 2:
+        if int(output) > 2:
             logger.error("Check singleton: NG")
             sys.exit(-1)
         logger.debug("Check singleton: OK")
