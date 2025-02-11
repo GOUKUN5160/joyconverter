@@ -134,7 +134,7 @@ const deleteInput = (index: number) => {
     </v-row>
   </div>
   <div class="text-center">
-    <v-menu open-on-hover>
+    <v-menu open-on-click>
       <template v-slot:activator="{ props }">
         <v-btn
           variant="outlined"

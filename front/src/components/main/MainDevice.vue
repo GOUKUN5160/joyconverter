@@ -96,7 +96,7 @@ const onButton = (serial: string, button: string, isPressed: boolean) => {
       button = "sl";
       break;
     case "right_sl":
-      button = "sr";
+      button = "sl";
       break;
     case "left_sr":
       button = "sr";

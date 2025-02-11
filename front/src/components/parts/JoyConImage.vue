@@ -21,6 +21,12 @@ const colors = computed(() => {
     body: props.bodyColor,
   };
 });
+const colorBtn = computed(() => {
+  return colors.value.btn;
+});
+const colorBody = computed(() => {
+  return colors.value.body;
+});
 const buttonHilights = computed(() => {
   const status = JSON.parse(JSON.stringify(props.status));
   for (const key in status) {
@@ -52,6 +58,63 @@ const buttonHilights = computed(() => {
     zr: status.zr || "none",
   };
   return hilights;
+});
+const buttonHilightsSl = computed(() => {
+  return buttonHilights.value.sl;
+});
+const buttonHilightsSr = computed(() => {
+  return buttonHilights.value.sr;
+});
+const buttonHilightsStick = computed(() => {
+  return buttonHilights.value.stick;
+});
+const buttonHilightsLeft = computed(() => {
+  return buttonHilights.value.left;
+});
+const buttonHilightsRight = computed(() => {
+  return buttonHilights.value.right;
+});
+const buttonHilightsDown = computed(() => {
+  return buttonHilights.value.down;
+});
+const buttonHilightsUp = computed(() => {
+  return buttonHilights.value.up;
+});
+const buttonHilightsCapture = computed(() => {
+  return buttonHilights.value.capture;
+});
+const buttonHilightsMinus = computed(() => {
+  return buttonHilights.value.minus;
+});
+const buttonHilightsL = computed(() => {
+  return buttonHilights.value.l == "none" ? colors.value.btn : buttonHilights.value.l;
+});
+const buttonHilightsZl = computed(() => {
+  return buttonHilights.value.zl;
+});
+const buttonHilightsA = computed(() => {
+  return buttonHilights.value.a;
+});
+const buttonHilightsY = computed(() => {
+  return buttonHilights.value.y;
+});
+const buttonHilightsB = computed(() => {
+  return buttonHilights.value.b;
+});
+const buttonHilightsX = computed(() => {
+  return buttonHilights.value.x;
+});
+const buttonHilightsHome = computed(() => {
+  return buttonHilights.value.home;
+});
+const buttonHilightsPlus = computed(() => {
+  return buttonHilights.value.plus;
+});
+const buttonHilightsR = computed(() => {
+  return buttonHilights.value.r == "none" ? colors.value.btn : buttonHilights.value.r;
+});
+const buttonHilightsZr = computed(() => {
+  return buttonHilights.value.zr;
 });
 </script>
 
@@ -185,11 +248,11 @@ const buttonHilights = computed(() => {
         <path id="r" class="btn-stroke" d="M375.193 30.1031C459.267 75.035 511.258 163.109 509.977 258.427"
           stroke="#000000" stroke-width="20.625" stroke-miterlimit="8" fill="none" fill-rule="evenodd"
           transform="matrix(-6.12323e-17 -1 -1 6.12323e-17 1803.5 1281.5)" />
-        <path id="sl" class="btn body" :style="colors.body"
+        <path id="sr" class="btn body" :style="colors.body"
           d="M0 2.66668C0 1.19391 1.19392-1.16173e-15 2.66669-1.16173e-15L13.3331 0C14.8059 -5.80866e-16 15.9998 1.19391 15.9998 2.66668L15.9998 70.3332C15.9998 71.806 14.8059 72.9999 13.3331 72.9999L2.66669 72.9999C1.19392 72.9999 0 71.806 0 70.3332Z"
           stroke-width="8" stroke-miterlimit="8" fill="#FF3C28" fill-rule="evenodd"
           transform="matrix(-1 0 0 1 1330 1091)" />
-        <path id="sr" class="btn body" :style="colors.body"
+        <path id="sl" class="btn body" :style="colors.body"
           d="M0 2.6667C0 1.19392 1.19392-1.16174e-15 2.6667-1.16174e-15L13.3332 0C14.806 -5.80869e-16 15.9999 1.19392 15.9999 2.6667L15.9999 70.3335C15.9999 71.8063 14.806 73.0002 13.3332 73.0002L2.6667 73.0002C1.19392 73.0002 0 71.8063 0 70.3335Z"
           stroke-width="8" stroke-miterlimit="8" fill="#FF3C28" fill-rule="evenodd"
           transform="matrix(-1 0 0 1 1330 1703)" />
@@ -212,86 +275,86 @@ const buttonHilights = computed(() => {
 }
 
 .btn {
-  fill: v-bind(colors.btn);
+  fill: v-bind(colorBtn);
 }
 
 .body {
-  fill: v-bind(colors.body);
+  fill: v-bind(colorBody);
 }
 
 #sl {
-  stroke: v-bind(buttonHilights.sl);
+  stroke: v-bind(buttonHilightsSl);
 }
 
 #sr {
-  stroke: v-bind(buttonHilights.sr);
+  stroke: v-bind(buttonHilightsSr);
 }
 
 #stick {
-  stroke: v-bind(buttonHilights.stick);
+  stroke: v-bind(buttonHilightsStick);
 }
 
 #left {
-  stroke: v-bind(buttonHilights.left);
+  stroke: v-bind(buttonHilightsLeft);
 }
 
 #right {
-  stroke: v-bind(buttonHilights.right);
+  stroke: v-bind(buttonHilightsRight);
 }
 
 #down {
-  stroke: v-bind(buttonHilights.down);
+  stroke: v-bind(buttonHilightsDown);
 }
 
 #up {
-  stroke: v-bind(buttonHilights.up);
+  stroke: v-bind(buttonHilightsUp);
 }
 
 #capture {
-  stroke: v-bind(buttonHilights.capture);
+  stroke: v-bind(buttonHilightsCapture);
 }
 
 #minus {
-  stroke: v-bind(buttonHilights.minus);
+  stroke: v-bind(buttonHilightsMinus);
 }
 
 #l {
-  stroke: v-bind(buttonHilights.l == "none" ? colors.btn : buttonHilights.l);
+  stroke: v-bind(buttonHilightsL);
 }
 
 #zl {
-  stroke: v-bind(buttonHilights.zl);
+  stroke: v-bind(buttonHilightsZl);
 }
 
 #a {
-  stroke: v-bind(buttonHilights.a);
+  stroke: v-bind(buttonHilightsA);
 }
 
 #y {
-  stroke: v-bind(buttonHilights.y);
+  stroke: v-bind(buttonHilightsY);
 }
 
 #b {
-  stroke: v-bind(buttonHilights.b);
+  stroke: v-bind(buttonHilightsB);
 }
 
 #x {
-  stroke: v-bind(buttonHilights.x);
+  stroke: v-bind(buttonHilightsX);
 }
 
 #home {
-  stroke: v-bind(buttonHilights.home);
+  stroke: v-bind(buttonHilightsHome);
 }
 
 #plus {
-  stroke: v-bind(buttonHilights.plus);
+  stroke: v-bind(buttonHilightsPlus);
 }
 
 #r {
-  stroke: v-bind(buttonHilights.r == "none" ? colors.btn : buttonHilights.r);
+  stroke: v-bind(buttonHilightsR);
 }
 
 #zr {
-  stroke: v-bind(buttonHilights.zr);
+  stroke: v-bind(buttonHilightsZr);
 }
 </style>

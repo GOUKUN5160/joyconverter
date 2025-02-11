@@ -182,7 +182,15 @@ class Inputs:
         self.logger.debug(f"Add listener: {listener_id} (mouse-{name})")
         return listener_id
 
-    def press_keys(self, keys: list[keyboard.Key | keyboard.KeyCode], duration: float=0) -> None:
+    def press_key(self, key: keyboard.Key | keyboard.KeyCode) -> None:
+        if isinstance(key, str):
+            key = keyboard.KeyCode.from_vk(int(key))
+        self.keyboard_controller.press(key)
+    def release_key(self, key: keyboard.Key | keyboard.KeyCode) -> None:
+        if isinstance(key, str):
+            key = keyboard.KeyCode.from_vk(int(key))
+        self.keyboard_controller.release(key)
+    def touch_keys(self, keys: list[keyboard.Key | keyboard.KeyCode], duration: float=0) -> None:
         key_list = self._str2key(keys)
         [self.keyboard_controller.press(key) for key in key_list]
         time.sleep(duration)
@@ -246,8 +254,8 @@ class Inputs:
         x, y = x / 2, y / 2
         return int(x), int(y), self.convert_config["pointer"]["duration"]
     def stick2scroll(self, data: dict[str, int]) -> tuple[float, float, float]:
-        # DURATION = 0.02 # 
-        # SHIFTING = 3 # 
+        # DURATION = 0.02 #
+        # SHIFTING = 3 #
         data["horizontal"] -= self.convert_config["splitted_num"] / 2
         data["vertical"] -= self.convert_config["splitted_num"] / 2
         x_sign = -1 if data["horizontal"] > 0 else 1

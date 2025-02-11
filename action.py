@@ -155,17 +155,17 @@ class Action:
                 if self.is_using_stick_keyboard:
                     return None
                 key_data = {
-                    "up": [key_data["id"] for key_data in json.loads(action_data["up"][0]["args"])["value"]],
-                    "down": [key_data["id"] for key_data in json.loads(action_data["down"][0]["args"])["value"]],
-                    "left": [key_data["id"] for key_data in json.loads(action_data["left"][0]["args"])["value"]],
-                    "right": [key_data["id"] for key_data in json.loads(action_data["right"][0]["args"])["value"]]
+                    "up": [key_data["id"] for key_data in json.loads(action_data["up"][0]["args"])["value"]] if "up" in action_data else [],
+                    "down": [key_data["id"] for key_data in json.loads(action_data["down"][0]["args"])["value"]] if "down" in action_data else [],
+                    "left": [key_data["id"] for key_data in json.loads(action_data["left"][0]["args"])["value"]] if "left" in action_data else [],
+                    "right": [key_data["id"] for key_data in json.loads(action_data["right"][0]["args"])["value"]] if "right" in action_data else []
                 }
                 self.inputter.convert_config["key"]["speed"] = int(action_data["speed"]) / 1000
                 self.inputter.convert_config["key"]["is_constant"] = action_data["noaccel"]
                 self.inputter.convert_config["key"]["threshold"] = (self.inputter.convert_config["splitted_num"] / 2) * (int(action_data["threshold"]) / 100)
                 keys, duration = self.inputter.stick2key(stick_data, key_data)
                 self.is_using_stick_keyboard = True
-                self.inputter.press_keys(keys, duration)
+                self.inputter.touch_keys(keys, duration)
                 self.is_using_stick_keyboard = False
             elif action_type == "cursor":
                 if self.is_using_stick_pointer:
@@ -306,15 +306,15 @@ class Action:
             event = json.loads(args)
             if event["action"] == "touch":
                 key_codes = [key["id"] for key in event["value"]]
-                self.inputter.press_keys(key_codes)
+                self.inputter.touch_keys(key_codes)
                 self.logger.debug(f"Touch keys: {key_codes}")
             elif event["action"] == "press":
                 for key in event["value"]:
-                    self.inputter.keyboard_controller.press(str(key["id"]))
+                    self.inputter.press_key(key["id"])
                 self.logger.debug(f"Press key: {len(event['value'])} keys")
             elif event["action"] == "release":
                 for key in event["value"]:
-                    self.inputter.keyboard_controller.release(str(key["id"]))
+                    self.inputter.release_key(key["id"])
                 self.logger.debug(f"Release key: {len(event['value'])} keys")
         elif action_type == "mouse":
             event = json.loads(args)
