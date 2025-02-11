@@ -25,7 +25,7 @@ class JoyConverter:
         image = Image.open(c.get_path("icons/active.png"))
         menu = Menu(
             MenuItem("設定", self.open_setting),
-            MenuItem("JoyConをリロード", self.reload_joycon),
+            MenuItem("JoyConリストを更新", self.reload_joycon),
             Menu.SEPARATOR,
             MenuItem("終了", self.stop),
         )
