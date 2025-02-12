@@ -5,7 +5,7 @@ bottle
 bottle-websocket
 pyparsing
 whichcraft
-pywebview
+pywebview==5.3.2
 pystray
 pynput
 screeninfo
