@@ -155,10 +155,10 @@ class Action:
                 if self.is_using_stick_keyboard:
                     return None
                 key_data = {
-                    "up": [key_data["id"] for key_data in json.loads(action_data["up"][0]["args"])["value"]] if "up" in action_data else [],
-                    "down": [key_data["id"] for key_data in json.loads(action_data["down"][0]["args"])["value"]] if "down" in action_data else [],
-                    "left": [key_data["id"] for key_data in json.loads(action_data["left"][0]["args"])["value"]] if "left" in action_data else [],
-                    "right": [key_data["id"] for key_data in json.loads(action_data["right"][0]["args"])["value"]] if "right" in action_data else []
+                    "up": [key_data["id"] for key_data in json.loads(action_data["up"][0]["args"])["value"]] if "up" in action_data and len(action_data["up"]) > 0 else [],
+                    "down": [key_data["id"] for key_data in json.loads(action_data["down"][0]["args"])["value"]] if "down" in action_data and len(action_data["down"]) > 0 else [],
+                    "left": [key_data["id"] for key_data in json.loads(action_data["left"][0]["args"])["value"]] if "left" in action_data and len(action_data["left"]) > 0 else [],
+                    "right": [key_data["id"] for key_data in json.loads(action_data["right"][0]["args"])["value"]] if "right" in action_data and len(action_data["right"]) > 0 else []
                 }
                 self.inputter.convert_config["key"]["speed"] = int(action_data["speed"]) / 1000
                 self.inputter.convert_config["key"]["is_constant"] = action_data["noaccel"]
