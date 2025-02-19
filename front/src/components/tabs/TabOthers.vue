@@ -59,7 +59,7 @@ const openStartUpFolder = () => {
           <v-expansion-panels variant="accordion">
             <v-expansion-panel title="何のためのソフト？">
               <v-expansion-panel-text class="pt-2">
-                「作業効率化を図るためにJoyConを片手デバイスで操作したい」と思っている方のためのソフトです。<br>
+                「作業効率化を図るためにJoyConを片手デバイスとして操作したい」と思っている方のためのソフトです。<br>
                 <strong>・分かりやすいUIデザイン</strong><br>
                 <strong>・クロスプラットフォーム（Windows、Mac）</strong><br>
                 <strong>・JoyConに特化</strong>（ゲーム用途での使用は想定されていません）<br>
@@ -70,8 +70,8 @@ const openStartUpFolder = () => {
             <v-expansion-panel title="JoyConが認識されません。">
               <v-expansion-panel-text>
                 JoyConとの通信に失敗している可能性が高いです。接続しているJoyConの電源を全てOFFにし、1本だけ電源を入れて再度お試しください。<br>
-                お使いの環境によっては、JoyConを複数本同時接続すると動作が不安定になる可能性があります。
-                Switchに接続するとペアリングが切れるので、Bluetooth設定を削除してから再度ペアリングしてください。
+                お使いの環境によっては、JoyConを複数本同時接続すると動作が不安定になる可能性があります。<br>
+                JoyConをSwitchや他のPCなどに接続するとペアリングが切れるので、Bluetooth設定を削除してから再度ペアリングしてください。
               </v-expansion-panel-text>
             </v-expansion-panel>
             <v-expansion-panel title="バイブレーションの「非同期実行」って何ですか？">
